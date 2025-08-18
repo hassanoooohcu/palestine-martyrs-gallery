@@ -1,6 +1,6 @@
 {
   "maintenanceMode": {
-    "enabled": true,
+    "enabled": false,
     "message": "الموقع تحت الصيانة مؤقتًا. سنعود قريبًا."
   },
   "siteAlert": {
