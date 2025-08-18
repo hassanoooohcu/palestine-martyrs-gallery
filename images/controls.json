@@ -3,7 +3,7 @@
     "passwordProtectionEnabled": false,
     "password": "Palestine1948",
     "maintenanceMode": {
-      "enabled": false,
+      "enabled": true,
       "message": "الموقع تحت الصيانة مؤقتًا. سنعود قريبًا."
     },
     "siteAlert": {
