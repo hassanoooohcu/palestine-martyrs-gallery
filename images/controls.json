@@ -1,0 +1,24 @@
+{
+  "controlSettings": {
+    "passwordProtectionEnabled": false,
+    "password": "Palestine1948",
+    "maintenanceMode": {
+      "enabled": false,
+      "message": "الموقع تحت الصيانة مؤقتًا. سنعود قريبًا."
+    },
+    "siteAlert": {
+      "enabled": false,
+      "message": "تنبيه: سيتم إضافة دفعة جديدة من الشهداء قريبًا."
+    }
+  },
+  "notifications": [
+    {
+      "sender": "الإدارة",
+      "message": "رحم الله شهداءنا الأبرار وأسكنهم فسيح جناته."
+    },
+    {
+      "sender": "حسن",
+      "message": "نعمل باستمرار على تحسين الموقع وتحديث قوائم الشهداء."
+    }
+  ]
+}
