@@ -1,512 +1,104 @@
 [
-  {
-    "name": "الشهيد محمد عمر رمضان غبن",
-    "image": null,
-    "type": "male"
-  },
-  {
-    "name": "الشهيد محمد هشام محمد ابودغيم",
-    "image": null,
-    "type": "male"
-  },
-  {
-    "name": "الشهيد حسام هشام محمد أبو دغيم",
-    "image": null,
-    "type": "male"
-  },
-  {
-    "name": "الشهيد محمود توفيق محمد السنوار",
-    "image": null,
-    "type": "male"
-  },
-  {
-    "name": "الشهيد يوسف رمضان شحده ابو الحسنه",
-    "image": null,
-    "type": "male"
-  },
-  {
-    "name": "الشهيد حمزة محمد عبد القادر الكحلوت",
-    "image": null,
-    "type": "male"
-  },
-  {
-    "name": "الشهيد صالح محمد عبد الفتاح عوده",
-    "image": null,
-    "type": "male"
-  },
-  {
-    "name": "الشهيد طارق خالد ابراهيم أبو درابي",
-    "image": null,
-    "type": "male"
-  },
-  {
-    "name": "الشهيد محمد ماجد خليل ابو درابي",
-    "image": null,
-    "type": "male"
-  },
-  {
-    "name": "الشهيد سائد خالد ابراهيم ابو درابي",
-    "image": null,
-    "type": "male"
-  },
-  {
-    "name": "الشهيد مصطفى ابراهيم خليل ابو درابي",
-    "image": null,
-    "type": "male"
-  },
-  {
-    "name": "الشهيد خالد إبراهيم خليل أبو درابي",
-    "image": null,
-    "type": "male"
-  },
-  {
-    "name": "الشهيد عماد سليمان شاكر الجمال",
-    "image": null,
-    "type": "male"
-  },
-  {
-    "name": "الشهيد محمد بهجت حسين السحار",
-    "image": null,
-    "type": "male"
-  },
-  {
-    "name": "الشهيد بلال خميس عبد البنا",
-    "image": null,
-    "type": "male"
-  },
-  {
-    "name": "الشهيد محمد اسماعيل يونس منصور",
-    "image": null,
-    "type": "male"
-  },
-  {
-    "name": "الشهيد جميل غازي عبد سلمان",
-    "image": null,
-    "type": "male"
-  },
-  {
-    "name": "الشهيد عاهد نافذ حسن ايوب",
-    "image": null,
-    "type": "male"
-  },
-  {
-    "name": "الشهيد احمد محمد ياسين عاشور",
-    "image": null,
-    "type": "male"
-  },
-  {
-    "name": "الشهيد عمر بلال سعيد لبد",
-    "image": null,
-    "type": "male"
-  },
-  {
-    "name": "الشهيد بلال رمضان رجب دكه",
-    "image": null,
-    "type": "male"
-  },
-  {
-    "name": "الشهيدة عليا أحمد محمد رمضان",
-    "image": null,
-    "type": "female"
-  },
-  {
-    "name": "الشهيد عمر محمد رفيق نصر",
-    "image": null,
-    "type": "male"
-  },
-  {
-    "name": "الشهيد عماد ياسين أحمد عاشور",
-    "image": null,
-    "type": "male"
-  },
-  {
-    "name": "الشهيد عيد حسين ابراهيم ابو حبل",
-    "image": null,
-    "type": "male"
-  },
-  {
-    "name": "الشهيد عبد القادر محمد إبراهيم أبو حبل",
-    "image": null,
-    "type": "male"
-  },
-  {
-    "name": "الشهيد محمد حسن ابراهيم ابو حبل",
-    "image": null,
-    "type": "male"
-  },
-  {
-    "name": "الشهيد محمد غسان محمود أبو حبل",
-    "image": null,
-    "type": "male"
-  },
-  {
-    "name": "الشهيد ابراهيم حسين ابراهيم ابو حبل",
-    "image": null,
-    "type": "male"
-  },
-  {
-    "name": "الشهيد اشرف جمال عبد الرحمن المبحوح",
-    "image": null,
-    "type": "male"
-  },
-  {
-    "name": "الشهيد مهدي طه جمعه عفانة",
-    "image": null,
-    "type": "male"
-  },
-  {
-    "name": "الشهيد هارون اسحاق يوسف مسلم",
-    "image": null,
-    "type": "male"
-  },
-  {
-    "name": "الشهيد محمد ميسر أحمد بدر",
-    "image": null,
-    "type": "male"
-  },
-  {
-    "name": "الشهيد محمود وحيد عايش ابو القمصان",
-    "image": null,
-    "type": "male"
-  },
-  {
-    "name": "الشهيد محمود محمد ابراهيم ثاري",
-    "image": null,
-    "type": "male"
-  },
-  {
-    "name": "الشهيد فارس أحمد محمد اللوح",
-    "image": null,
-    "type": "male"
-  },
-  {
-    "name": "الشهيدة اجنادين محمود عبد الخالق خلة",
-    "image": null,
-    "type": "female"
-  },
-  {
-    "name": "الشهيد نضال زهير زكريا سليمان",
-    "image": null,
-    "type": "male"
-  },
-  {
-    "name": "الشهيد محمد مأمون نافذ السقا",
-    "image": null,
-    "type": "male"
-  },
-  {
-    "name": "الشهيد نافذ محمود نافذ جنديه",
-    "image": null,
-    "type": "male"
-  },
-  {
-    "name": "الطفل الشهيد عبد الرحمن عثمان سالم ابو عويضه",
-    "image": null,
-    "type": "child"
-  },
-  {
-    "name": "الطفل الشهيد تيسير بكر تيسير رمضان",
-    "image": null,
-    "type": "child"
-  },
-  {
-    "name": "الشهيد امين سهيل محمد كيلاني",
-    "image": null,
-    "type": "male"
-  },
-  {
-    "name": "الشهيد نظير عبد موسى شبات",
-    "image": null,
-    "type": "male"
-  },
-  {
-    "name": "الشهيد محمد وائل عبد المجيد علي",
-    "image": null,
-    "type": "male"
-  },
-  {
-    "name": "الشهيد اياد سمير خميس الحواجري",
-    "image": null,
-    "type": "male"
-  },
-  {
-    "name": "الشهيد أحمد احسان عبد علي",
-    "image": null,
-    "type": "male"
-  },
-  {
-    "name": "الشهيد ثائر اشرف عبدربه الكيلاني",
-    "image": null,
-    "type": "male"
-  },
-  {
-    "name": "الشهيد مصطفى ابراهيم فتحي ابو علي",
-    "image": null,
-    "type": "male"
-  },
-  {
-    "name": "الشهيد عبدالعزيز ابراهيم فتحي ابو علي",
-    "image": null,
-    "type": "male"
-  },
-  {
-    "name": "الشهيد ياسر موسى حسن زايد",
-    "image": null,
-    "type": "male"
-  },
-  {
-    "name": "الشهيد محمود موسى عبد الوهاب العطل",
-    "image": null,
-    "type": "male"
-  },
-  {
-    "name": "الشهيدة ولاء محمد رشاد الاسطل",
-    "image": null,
-    "type": "female"
-  },
-  {
-    "name": "الشهيد دياب عبد الرحمن اديب الهواري",
-    "image": null,
-    "type": "male"
-  },
-  {
-    "name": "الشهيد محمد ناصر محمد ابو عطيوي",
-    "image": null,
-    "type": "male"
-  },
-  {
-    "name": "الشهيد مهران عنان ديب عبد ربه داود",
-    "image": null,
-    "type": "male"
-  },
-  {
-    "name": "الطفلة الشهيدة لين محمد رشاد الاسطل",
-    "image": null,
-    "type": "child"
-  },
-  {
-    "name": "الطفلة الشهيدة ندى محمد رشاد الاسطل",
-    "image": null,
-    "type": "child"
-  },
-  {
-    "name": "الطفل الشهيد وليد محمد رشاد الاسطل",
-    "image": null,
-    "type": "child"
-  },
-  {
-    "name": "الشهيدة ناديه وليد محمد الاسطل",
-    "image": null,
-    "type": "female"
-  },
-  {
-    "name": "الشهيد محمد رشاد محمد الاسطل",
-    "image": null,
-    "type": "male"
-  },
-  {
-    "name": "الشهيدة وفاء علي حسين احمد",
-    "image": null,
-    "type": "female"
-  },
-  {
-    "name": "الشهيد رامي عبد العزيز عبد الرحمن شكيان",
-    "image": null,
-    "type": "male"
-  },
-  {
-    "name": "الشهيد تامر عطيه عيد محارب",
-    "image": null,
-    "type": "male"
-  },
-  {
-    "name": "الشهيد سائد وصفي حسان الغفير",
-    "image": null,
-    "type": "male"
-  },
-  {
-    "name": "الشهيد محمد حمدين مسلم الجرابعه",
-    "image": null,
-    "type": "male"
-  },
-  {
-    "name": "الشهيد هاني ناجي مسلم ابو خاطر",
-    "image": null,
-    "type": "male"
-  },
-  {
-    "name": "الشهيد محمد ابراهيم محمد الخطيب",
-    "image": null,
-    "type": "male"
-  },
-  {
-    "name": "الشهيدة نسرين فؤاد عبد المعطي محارب",
-    "image": null,
-    "type": "female"
-  },
-  {
-    "name": "الشهيد محمد فايز عبد المعطي الشرفا",
-    "image": null,
-    "type": "male"
-  },
-  {
-    "name": "الشهيد محمد شعبان محمد الاي",
-    "image": null,
-    "type": "male"
-  },
-  {
-    "name": "الشهيدة امل أحمد مبارك ابو نوفل",
-    "image": null,
-    "type": "female"
-  },
-  {
-    "name": "الشهيد أحمد جلال حسن ابو عطيوي",
-    "image": null,
-    "type": "male"
-  },
-  {
-    "name": "الشهيد يوسف محمد علي ياسين",
-    "image": null,
-    "type": "male"
-  },
-  {
-    "name": "الشهيد شادي عزمي حسن عفانة",
-    "image": null,
-    "type": "male"
-  },
-  {
-    "name": "الشهيد جبر أحمد مبارك ابو نوفل",
-    "image": null,
-    "type": "male"
-  },
-  {
-    "name": "الشهيد سعيد خليل سعيد خضير",
-    "image": null,
-    "type": "male"
-  },
-  {
-    "name": "الشهيد يوسف صائب خليل عز الدين",
-    "image": null,
-    "type": "male"
-  },
-  {
-    "name": "الشهيد صخر اسماعيل أحمد الزعانين",
-    "image": null,
-    "type": "male"
-  },
-  {
-    "name": "الشهيد محمود معمر رمضان خلة",
-    "image": null,
-    "type": "male"
-  },
-  {
-    "name": "الطفل الشهيد عليان عماد عليان عليوه",
-    "image": null,
-    "type": "child"
-  },
-  {
-    "name": "الطفل الشهيد عبد الله محمد هاشم اسليم",
-    "image": null,
-    "type": "child"
-  },
-  {
-    "name": "الشهيد محمد رشيد عكه",
-    "image": null,
-    "type": "male"
-  },
-  {
-    "name": "الشهيد أشرف محمد فخري عبد أبو وردة",
-    "image": null,
-    "type": "male"
-  },
-  {
-    "name": "الشهيد سامر حمدي خضر قحمان",
-    "image": null,
-    "type": "male"
-  },
-  {
-    "name": "الشهيد يوسف حسني خليل نبهان",
-    "image": null,
-    "type": "male"
-  },
-  {
-    "name": "الشهيد شعبان عبد الرحمن شعبان غبن",
-    "image": null,
-    "type": "male"
-  },
-  {
-    "name": "الشهيد مدحت عطا عبد الوهاب المصري",
-    "image": null,
-    "type": "male"
-  },
-  {
-    "name": "الشهيدة صباح أحمد محمد عزام",
-    "image": null,
-    "type": "female"
-  },
-  {
-    "name": "الشهيد محمد علي حسن عفانة",
-    "image": null,
-    "type": "male"
-  },
-  {
-    "name": "الشهيد تحرير عمر خميس المصري",
-    "image": null,
-    "type": "male"
-  },
-  {
-    "name": "الشهيد حمدي سعيد يوسف طولان",
-    "image": null,
-    "type": "male"
-  },
-  {
-    "name": "الشهيد محمد حسن توفيق التتري",
-    "image": null,
-    "type": "male"
-  },
-  {
-    "name": "الشهيد فتحي نصر محمد ابو نصير",
-    "image": null,
-    "type": "male"
-  },
-  {
-    "name": "الشهيد ثائر جلال عبد القادر صالح",
-    "image": null,
-    "type": "male"
-  },
-  {
-    "name": "الشهيد موسى سالم محمد عطوه",
-    "image": null,
-    "type": "male"
-  },
-  {
-    "name": "الشهيد زياد أحمد محمد النجار",
-    "image": null,
-    "type": "male"
-  },
-  {
-    "name": "الشهيدة غاده عزات حسان اسليم",
-    "image": null,
-    "type": "female"
-  },
-  {
-    "name": "الشهيد فيصل محمد عبد الرحمن المطوق",
-    "image": null,
-    "type": "male"
-  },
-  {
-    "name": "الشهيد طلعت أحمد محمد علي",
-    "image": null,
-    "type": "male"
-  },
-  {
-    "name": "الشهيد فضل سليمان محمد ابو غنايم",
-    "image": null,
-    "type": "male"
-  },
-  {
-    "name": "الشهيد رائد ماهر محمود الحداد",
-    "image": null,
-    "type": "male"
-  }
-    ]
+  { "name": "الشهيد محمد عمر رمضان غبن", "image": null, "type": "male" },
+  { "name": "الشهيد محمد هشام محمد ابودغيم", "image": null, "type": "male" },
+  { "name": "الشهيد حسام هشام محمد أبو دغيم", "image": null, "type": "male" },
+  { "name": "الشهيد محمود توفيق محمد السنوار", "image": null, "type": "male" },
+  { "name": "الشهيد يوسف رمضان شحده ابو الحسنه", "image": null, "type": "male" },
+  { "name": "الشهيد حمزة محمد عبد القادر الكحلوت", "image": null, "type": "male" },
+  { "name": "الشهيد صالح محمد عبد الفتاح عوده", "image": null, "type": "male" },
+  { "name": "الشهيد طارق خالد ابراهيم أبو درابي", "image": null, "type": "male" },
+  { "name": "الشهيد محمد ماجد خليل ابو درابي", "image": null, "type": "male" },
+  { "name": "الشهيد سائد خالد ابراهيم ابو درابي", "image": null, "type": "male" },
+  { "name": "الشهيد مصطفى ابراهيم خليل ابو درابي", "image": null, "type": "male" },
+  { "name": "الشهيد خالد إبراهيم خليل أبو درابي", "image": null, "type": "male" },
+  { "name": "الشهيد عماد سليمان شاكر الجمال", "image": null, "type": "male" },
+  { "name": "الشهيد محمد بهجت حسين السحار", "image": null, "type": "male" },
+  { "name": "الشهيد بلال خميس عبد البنا", "image": null, "type": "male" },
+  { "name": "الشهيد محمد اسماعيل يونس منصور", "image": null, "type": "male" },
+  { "name": "الشهيد جميل غازي عبد سلمان", "image": null, "type": "male" },
+  { "name": "الشهيد عاهد نافذ حسن ايوب", "image": null, "type": "male" },
+  { "name": "الشهيد احمد محمد ياسين عاشور", "image": null, "type": "male" },
+  { "name": "الشهيد عمر بلال سعيد لبد", "image": null, "type": "male" },
+  { "name": "الشهيد بلال رمضان رجب دكه", "image": null, "type": "male" },
+  { "name": "الشهيدة عليا أحمد محمد رمضان", "image": null, "type": "female" },
+  { "name": "الشهيد عمر محمد رفيق نصر", "image": null, "type": "male" },
+  { "name": "الشهيد عماد ياسين أحمد عاشور", "image": null, "type": "male" },
+  { "name": "الشهيد عيد حسين ابراهيم ابو حبل", "image": null, "type": "male" },
+  { "name": "الشهيد عبد القادر محمد إبراهيم أبو حبل", "image": null, "type": "male" },
+  { "name": "الشهيد محمد حسن ابراهيم ابو حبل", "image": null, "type": "male" },
+  { "name": "الشهيد محمد غسان محمود أبو حبل", "image": null, "type": "male" },
+  { "name": "الشهيد ابراهيم حسين ابراهيم ابو حبل", "image": null, "type": "male" },
+  { "name": "الشهيد اشرف جمال عبد الرحمن المبحوح", "image": null, "type": "male" },
+  { "name": "الشهيد مهدي طه جمعه عفانة", "image": null, "type": "male" },
+  { "name": "الشهيد هارون اسحاق يوسف مسلم", "image": null, "type": "male" },
+  { "name": "الشهيد محمد ميسر أحمد بدر", "image": null, "type": "male" },
+  { "name": "الشهيد محمود وحيد عايش ابو القمصان", "image": null, "type": "male" },
+  { "name": "الشهيد محمود محمد ابراهيم ثاري", "image": null, "type": "male" },
+  { "name": "الشهيد فارس أحمد محمد اللوح", "image": null, "type": "male" },
+  { "name": "الشهيدة اجنادين محمود عبد الخالق خلة", "image": null, "type": "female" },
+  { "name": "الشهيد نضال زهير زكريا سليمان", "image": null, "type": "male" },
+  { "name": "الشهيد محمد مأمون نافذ السقا", "image": null, "type": "male" },
+  { "name": "الشهيد نافذ محمود نافذ جنديه", "image": null, "type": "male" },
+  { "name": "الطفل الشهيد عبد الرحمن عثمان سالم ابو عويضه", "image": null, "type": "child" },
+  { "name": "الطفل الشهيد تيسير بكر تيسير رمضان", "image": null, "type": "child" },
+  { "name": "الشهيد امين سهيل محمد كيلاني", "image": null, "type": "male" },
+  { "name": "الشهيد نظير عبد موسى شبات", "image": null, "type": "male" },
+  { "name": "الشهيد محمد وائل عبد المجيد علي", "image": null, "type": "male" },
+  { "name": "الشهيد اياد سمير خميس الحواجري", "image": null, "type": "male" },
+  { "name": "الشهيد أحمد احسان عبد علي", "image": null, "type": "male" },
+  { "name": "الشهيد ثائر اشرف عبدربه الكيلاني", "image": null, "type": "male" },
+  { "name": "الشهيد مصطفى ابراهيم فتحي ابو علي", "image": null, "type": "male" },
+  { "name": "الشهيد عبدالعزيز ابراهيم فتحي ابو علي", "image": null, "type": "male" },
+  { "name": "الشهيد ياسر موسى حسن زايد", "image": null, "type": "male" },
+  { "name": "الشهيد محمود موسى عبد الوهاب العطل", "image": null, "type": "male" },
+  { "name": "الشهيدة ولاء محمد رشاد الاسطل", "image": null, "type": "female" },
+  { "name": "الشهيد دياب عبد الرحمن اديب الهواري", "image": null, "type": "male" },
+  { "name": "الشهيد محمد ناصر محمد ابو عطيوي", "image": null, "type": "male" },
+  { "name": "الشهيد مهران عنان ديب عبد ربه داود", "image": null, "type": "male" },
+  { "name": "الطفلة الشهيدة لين محمد رشاد الاسطل", "image": null, "type": "child" },
+  { "name": "الطفلة الشهيدة ندى محمد رشاد الاسطل", "image": null, "type": "child" },
+  { "name": "الطفل الشهيد وليد محمد رشاد الاسطل", "image": null, "type": "child" },
+  { "name": "الشهيدة ناديه وليد محمد الاسطل", "image": null, "type": "female" },
+  { "name": "الشهيد محمد رشاد محمد الاسطل", "image": null, "type": "male" },
+  { "name": "الشهيدة وفاء علي حسين احمد", "image": null, "type": "female" },
+  { "name": "الشهيد رامي عبد العزيز عبد الرحمن شكيان", "image": null, "type": "male" },
+  { "name": "الشهيد تامر عطيه عيد محارب", "image": null, "type": "male" },
+  { "name": "الشهيد سائد وصفي حسان الغفير", "image": null, "type": "male" },
+  { "name": "الشهيد محمد حمدين مسلم الجرابعه", "image": null, "type": "male" },
+  { "name": "الشهيد هاني ناجي مسلم ابو خاطر", "image": null, "type": "male" },
+  { "name": "الشهيد محمد ابراهيم محمد الخطيب", "image": null, "type": "male" },
+  { "name": "الشهيدة نسرين فؤاد عبد المعطي محارب", "image": null, "type": "female" },
+  { "name": "الشهيد محمد فايز عبد المعطي الشرفا", "image": null, "type": "male" },
+  { "name": "الشهيد محمد شعبان محمد الاي", "image": null, "type": "male" },
+  { "name": "الشهيدة امل أحمد مبارك ابو نوفل", "image": null, "type": "female" },
+  { "name": "الشهيد أحمد جلال حسن ابو عطيوي", "image": null, "type": "male" },
+  { "name": "الشهيد يوسف محمد علي ياسين", "image": null, "type": "male" },
+  { "name": "الشهيد شادي عزمي حسن عفانة", "image": null, "type": "male" },
+  { "name": "الشهيد جبر أحمد مبارك ابو نوفل", "image": null, "type": "male" },
+  { "name": "الشهيد سعيد خليل سعيد خضير", "image": null, "type": "male" },
+  { "name": "الشهيد يوسف صائب خليل عز الدين", "image": null, "type": "male" },
+  { "name": "الشهيد صخر اسماعيل أحمد الزعانين", "image": null, "type": "male" },
+  { "name": "الشهيد محمود معمر رمضان خلة", "image": null, "type": "male" },
+  { "name": "الطفل الشهيد عليان عماد عليان عليوه", "image": null, "type": "child" },
+  { "name": "الطفل الشهيد عبد الله محمد هاشم اسليم", "image": null, "type": "child" },
+  { "name": "الشهيد محمد رشيد عكه", "image": null, "type": "male" },
+  { "name": "الشهيد أشرف محمد فخري عبد أبو وردة", "image": null, "type": "male" },
+  { "name": "الشهيد سامر حمدي خضر قحمان", "image": null, "type": "male" },
+  { "name": "الشهيد يوسف حسني خليل نبهان", "image": null, "type": "male" },
+  { "name": "الشهيد شعبان عبد الرحمن شعبان غبن", "image": null, "type": "male" },
+  { "name": "الشهيد مدحت عطا عبد الوهاب المصري", "image": null, "type": "male" },
+  { "name": "الشهيدة صباح أحمد محمد عزام", "image": null, "type": "female" },
+  { "name": "الشهيد محمد علي حسن عفانة", "image": null, "type": "male" },
+  { "name": "الشهيد تحرير عمر خميس المصري", "image": null, "type": "male" },
+  { "name": "الشهيد حمدي سعيد يوسف طولان", "image": null, "type": "male" },
+  { "name": "الشهيد محمد حسن توفيق التتري", "image": null, "type": "male" },
+  { "name": "الشهيد فتحي نصر محمد ابو نصير", "image": null, "type": "male" },
+  { "name": "الشهيد ثائر جلال عبد القادر صالح", "image": null, "type": "male" },
+  { "name": "الشهيد موسى سالم محمد عطوه", "image": null, "type": "male" },
+  { "name": "الشهيد زياد أحمد محمد النجار", "image": null, "type": "male" },
+  { "name": "الشهيدة غاده عزات حسان اسليم", "image": null, "type": "female" },
+  { "name": "الشهيد فيصل محمد عبد الرحمن المطوق", "image": null, "type": "male" },
+  { "name": "الشهيد طلعت أحمد محمد علي", "image": null, "type": "male" },
+  { "name": "الشهيد فضل سليمان محمد ابو غنايم", "image": null, "type": "male" },
+  { "name": "الشهيد رائد ماهر محمود الحداد", "image": null, "type": "male" }
+]
