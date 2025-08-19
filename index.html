@@ -41,13 +41,54 @@
         #notification-bell { position: relative; cursor: pointer; }
         #notification-bell svg { width: 32px; height: 32px; fill: #fff; }
         #notification-badge { position: absolute; top: -5px; right: -8px; background-color: #d9534f; color: white; width: 22px; height: 22px; border-radius: 50%; font-size: 0.9em; font-weight: bold; display: none; justify-content: center; align-items: center; border: 2px solid #1a2a3a; }
-        #notification-modal .modal-content ul { list-style: none; padding: 0; text-align: right; max-height: 60vh; overflow-y: auto;}
+        
+        /* === CSS الجديد للإشعارات === */
+        #notification-modal .modal-content ul { list-style: none; padding: 0; max-height: 70vh; overflow-y: auto; }
+        #notification-modal .notification-item {
+            background: linear-gradient(145deg, #e6e6e6, #ffffff);
+            border-radius: 15px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15), inset 0 0 10px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            margin-bottom: 20px;
+            text-align: center;
+            border: 1px solid rgba(255, 255, 255, 0.5);
+        }
+        #notification-modal .sender-info {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        #notification-modal .sender-img {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 4px solid #fff;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            margin-bottom: 10px;
+        }
+        #notification-modal .sender-name {
+            font-size: 1.1em;
+            font-weight: bold;
+            color: #333;
+        }
+        #notification-modal .sender-name span {
+            font-weight: normal;
+            color: #666;
+        }
+        #notification-modal .notification-message {
+            font-size: 1.2em;
+            color: #1a2a3a;
+            line-height: 1.6;
+        }
+        /* === نهاية CSS الجديد === */
+
         #toast { position: fixed; bottom: -100px; left: 50%; transform: translateX(-50%); background: linear-gradient(135deg, #333, #555); color: white; padding: 15px 25px; border-radius: 10px; box-shadow: 0 10px 25px rgba(0,0,0,0.4); z-index: 2000; transition: all 0.6s cubic-bezier(0.68, -0.55, 0.27, 1.55); border-top: 3px solid #ffc107; font-size: 1.1em; }
         #toast.show { bottom: 30px; }
     </style>
 </head>
 <body>
-    <!-- === تم إرجاع الجرس هنا === -->
     <header><h1>شهداء فلسطين الأبرار</h1><div id="notification-bell"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill="currentColor" d="M12 22c1.1 0 2-.9 2-2h-4c0 1.1.9 2 2 2zm6-6v-5c0-3.07-1.63-5.64-4.5-6.32V4c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v.68C7.64 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2z"/></svg><span id="notification-badge"></span></div></header>
     
     <div class="controls-container">
@@ -71,10 +112,10 @@
 
 <script>
     // ===================================================================================
-    //  الإصدار 7: الحل النهائي (Single Source of Truth)
-    //  1. الاعتماد الكامل على martyrs.json كمصدر وحيد للبيانات (100% مستقر).
-    //  2. التحكم اليدوي الكامل في الصور لضمان عدم حدوث أخطاء.
-    //  3. إرجاع نظام الإشعارات ليعمل من ملف messages.text.
+    //  الإصدار 8: تصميم احترافي للإشعارات
+    //  1. تعديل شكل الإشعارات لتشمل صورة مرسل دائرية وتصميم 3D.
+    //  2. تعديل صيغة ملف messages.text ليدعم اسم المرسل وصورة المرسل.
+    //  3. الحفاظ على استقرار وثبات الإصدار السابق.
     // ===================================================================================
 
     const GITHUB_USERNAME = "hassanoooohcu";
@@ -84,7 +125,7 @@
     const getCacheBuster = () => `?v=${Date.now()}`;
 
     const DATA_FILE_URL = `${RAW_GITHUB_BASE}/data/martyrs.json`;
-    const MESSAGES_FILE_URL = `${RAW_GITHUB_BASE}/images/messages.text`; // ملف الإشعارات
+    const MESSAGES_FILE_URL = `${RAW_GITHUB_BASE}/images/messages.text`;
     const NO_PHOTO_IMAGE_URL = `${RAW_GITHUB_BASE}/images/nophoto.jpg`;
     
     const CHUNK_SIZE = 30;
@@ -94,21 +135,27 @@
     let imageObserver;
 
     async function fetchMartyrsData() {
-        console.log("Fetching martyrs data from single source: martyrs.json");
         const response = await fetch(`${DATA_FILE_URL}${getCacheBuster()}`, { cache: "no-store" });
         if (!response.ok) throw new Error(`Failed to fetch martyrs.json: ${response.statusText}`);
         return response.json();
     }
 
     async function fetchNotifications() {
-        console.log("Fetching notifications from messages.text...");
         try {
             const response = await fetch(`${MESSAGES_FILE_URL}${getCacheBuster()}`, { cache: "no-store" });
-            if (!response.ok) return []; // لا تفشل الصفحة كلها إذا لم يوجد الملف
+            if (!response.ok) return [];
             const text = await response.text();
-            return text.split('\n')
-                       .map(line => line.substring(line.indexOf(':') + 1).trim())
-                       .filter(Boolean);
+            
+            return text.split('\n').map(line => {
+                const parts = line.split('|');
+                if (parts.length !== 3) return null;
+                return {
+                    sender: parts[0].trim(),
+                    image: parts[1].trim(),
+                    message: parts[2].trim()
+                };
+            }).filter(Boolean);
+
         } catch (error) {
             console.error("Could not fetch notifications:", error);
             return [];
@@ -118,7 +165,6 @@
     async function main() {
         try {
             document.getElementById('loading-message').style.display = 'block';
-            
             const [martyrs, messages] = await Promise.all([
                 fetchMartyrsData(),
                 fetchNotifications()
@@ -138,86 +184,39 @@
             document.getElementById('loading-message').textContent = 'فشل تحميل البيانات. اضغط على زر التحديث.';
         }
     }
-
-    function renderNextChunk() {
-        if (loadMoreObserver) loadMoreObserver.disconnect();
-
-        const gallery = document.getElementById('martyrs-gallery');
-        const fragment = document.createDocumentFragment();
-        const chunk = allMartyrsData.slice(renderedCount, renderedCount + CHUNK_SIZE);
-
-        if (chunk.length === 0) return;
-
-        chunk.forEach(martyr => fragment.appendChild(buildMartyrCard(martyr)));
-        gallery.appendChild(fragment);
-        gallery.querySelectorAll('img[data-src]:not([data-observed])').forEach(img => {
-            img.setAttribute('data-observed', 'true');
-            imageObserver.observe(img);
-        });
-
-        renderedCount += chunk.length;
-        const lastCard = gallery.lastElementChild;
-        if (lastCard && renderedCount < allMartyrsData.length) {
-            loadMoreObserver = new IntersectionObserver(entries => {
-                if (entries[0].isIntersecting) renderNextChunk();
-            }, { rootMargin: '400px' });
-            loadMoreObserver.observe(lastCard);
-        }
-    }
     
     function renderNotifications(messages) {
         if (messages.length === 0) return;
         const badge = document.getElementById('notification-badge');
         const list = document.getElementById('notification-list');
-        list.innerHTML = ''; // إفراغ القائمة
+        list.innerHTML = '';
         
         messages.forEach(msg => {
             const li = document.createElement('li');
-            li.textContent = msg;
+            li.className = 'notification-item';
+            
+            const senderImageUrl = `${RAW_GITHUB_BASE}/images/${msg.image}`;
+
+            li.innerHTML = `
+                <div class="sender-info">
+                    <img src="${senderImageUrl}" alt="صورة المرسل" class="sender-img">
+                    <div class="sender-name"><span>مرسل من:</span> ${msg.sender}</div>
+                </div>
+                <p class="notification-message">${msg.message}</p>
+            `;
             list.appendChild(li);
         });
 
         badge.textContent = messages.length;
         badge.style.display = 'flex';
     }
-    
-    function updateCounters() {
-        const counters = { male: 0, female: 0, child: 0 };
-        allMartyrsData.sort((a, b) => (a.image && !b.image) ? -1 : (!a.image && b.image) ? 1 : 0);
-        allMartyrsData.forEach(martyr => {
-            if (counters.hasOwnProperty(martyr.type)) counters[martyr.type]++;
-        });
-        document.getElementById('male-count').textContent = counters.male;
-        document.getElementById('female-count').textContent = counters.female;
-        document.getElementById('child-count').textContent = counters.child;
-        document.getElementById('total-count').textContent = allMartyrsData.length;
-    }
-    
-    function buildMartyrCard(martyr) {
-        const scene = document.createElement('div'); scene.className = 'scene';
-        const imageUrl = martyr.image ? `${RAW_GITHUB_BASE}/images/${martyr.image}` : NO_PHOTO_IMAGE_URL;
-        let messageText;
-        switch (martyr.type) { 
-            case 'female': messageText = 'ضحت بحياتها فداءً لوطنها'; break; 
-            case 'child': messageText = 'قُدّمت طفولته فداءً لوطنه'; break; 
-            default: messageText = 'ضحى بحياته فداءً لوطنه'; break; 
-        }
-        scene.innerHTML = `<div class="martyr-card"><div class="image-frame"><div class="image-container"><img data-src="${imageUrl}${getCacheBuster()}" alt="صورة ${martyr.name}" loading="lazy"></div><div class="name-container"><p class="martyr-name">${martyr.name}</p><p class="final-message">${messageText}</p></div></div></div>`;
-        return scene;
-    }
 
+    function renderNextChunk() { if (loadMoreObserver) loadMoreObserver.disconnect(); const gallery = document.getElementById('martyrs-gallery'); const fragment = document.createDocumentFragment(); const chunk = allMartyrsData.slice(renderedCount, renderedCount + CHUNK_SIZE); if (chunk.length === 0) return; chunk.forEach(martyr => fragment.appendChild(buildMartyrCard(martyr))); gallery.appendChild(fragment); gallery.querySelectorAll('img[data-src]:not([data-observed])').forEach(img => { img.setAttribute('data-observed', 'true'); imageObserver.observe(img); }); renderedCount += chunk.length; const lastCard = gallery.lastElementChild; if (lastCard && renderedCount < allMartyrsData.length) { loadMoreObserver = new IntersectionObserver(entries => { if (entries[0].isIntersecting) renderNextChunk(); }, { rootMargin: '400px' }); loadMoreObserver.observe(lastCard); } }
+    function updateCounters() { const counters = { male: 0, female: 0, child: 0 }; allMartyrsData.sort((a, b) => (a.image && !b.image) ? -1 : (!a.image && b.image) ? 1 : 0); allMartyrsData.forEach(martyr => { if (counters.hasOwnProperty(martyr.type)) counters[martyr.type]++; }); document.getElementById('male-count').textContent = counters.male; document.getElementById('female-count').textContent = counters.female; document.getElementById('child-count').textContent = counters.child; document.getElementById('total-count').textContent = allMartyrsData.length; }
+    function buildMartyrCard(martyr) { const scene = document.createElement('div'); scene.className = 'scene'; const imageUrl = martyr.image ? `${RAW_GITHUB_BASE}/images/${martyr.image}` : NO_PHOTO_IMAGE_URL; let messageText; switch (martyr.type) { case 'female': messageText = 'ضحت بحياتها فداءً لوطنها'; break; case 'child': messageText = 'قُدّمت طفولته فداءً لوطنه'; break; default: messageText = 'ضحى بحياته فداءً لوطنه'; break; } scene.innerHTML = `<div class="martyr-card"><div class="image-frame"><div class="image-container"><img data-src="${imageUrl}${getCacheBuster()}" alt="صورة ${martyr.name}" loading="lazy"></div><div class="name-container"><p class="martyr-name">${martyr.name}</p><p class="final-message">${messageText}</p></div></div></div>`; return scene; }
     function initImageObserver() { if (imageObserver) imageObserver.disconnect(); imageObserver = new IntersectionObserver((entries, observer) => { entries.forEach(entry => { if (entry.isIntersecting) { const img = entry.target; img.src = img.dataset.src; img.onload = () => img.classList.add('loaded'); observer.unobserve(img); } }); }, { rootMargin: '200px' }); }
     function showToast(message) { document.querySelectorAll('#toast').forEach(t => t.remove()); const toast = document.createElement('div'); toast.id = 'toast'; toast.textContent = message; document.body.appendChild(toast); setTimeout(() => toast.classList.add('show'), 50); setTimeout(() => { toast.classList.remove('show'); setTimeout(() => toast.remove(), 4000); }, 4000); }
-    
-    function setupEventListeners() {
-        document.getElementById('hard-refresh-btn').addEventListener('click', () => { showToast("جاري فرض التحديث الكامل..."); setTimeout(() => { window.location.reload(true); }, 1000); });
-        document.getElementById('notification-bell').addEventListener('click', () => document.getElementById('notification-modal').classList.add('active'));
-        const imageModal = document.getElementById('image-modal');
-        const galleryContainer = document.getElementById('martyrs-gallery');
-        galleryContainer.addEventListener('click', (event) => { const clickedScene = event.target.closest('.scene'); if (!clickedScene) return; if (clickedScene.classList.contains('active')) { const img = clickedScene.querySelector('img'); if (img && (img.src || img.dataset.src)) { imageModal.querySelector('#modal-img').src = img.src || img.dataset.src; imageModal.querySelector('#modal-name').textContent = clickedScene.querySelector('.martyr-name').textContent; imageModal.querySelector('#modal-message').textContent = "إِنَّا لِلّهِ وَإِنَّـا إِلَيْهِ رَاجِعونَ"; imageModal.classList.add('active'); } } else { galleryContainer.querySelector('.scene.active')?.classList.remove('active'); clickedScene.classList.add('active'); } });
-        document.addEventListener('click', (event) => { if (!event.target.closest('.scene')) { document.querySelector('.gallery-container .scene.active')?.classList.remove('active'); } });
-        document.querySelectorAll('.modal-overlay').forEach(overlay => { overlay.addEventListener('click', (e) => { if (e.target === overlay || e.target.classList.contains('close-modal')) { overlay.classList.remove('active'); } }); });
-    }
+    function setupEventListeners() { document.getElementById('hard-refresh-btn').addEventListener('click', () => { showToast("جاري فرض التحديث الكامل..."); setTimeout(() => { window.location.reload(true); }, 1000); }); document.getElementById('notification-bell').addEventListener('click', () => document.getElementById('notification-modal').classList.add('active')); const imageModal = document.getElementById('image-modal'); const galleryContainer = document.getElementById('martyrs-gallery'); galleryContainer.addEventListener('click', (event) => { const clickedScene = event.target.closest('.scene'); if (!clickedScene) return; if (clickedScene.classList.contains('active')) { const img = clickedScene.querySelector('img'); if (img && (img.src || img.dataset.src)) { imageModal.querySelector('#modal-img').src = img.src || img.dataset.src; imageModal.querySelector('#modal-name').textContent = clickedScene.querySelector('.martyr-name').textContent; imageModal.querySelector('#modal-message').textContent = "إِنَّا لِلّهِ وَإِنَّـا إِلَيْهِ رَاجِعونَ"; imageModal.classList.add('active'); } } else { galleryContainer.querySelector('.scene.active')?.classList.remove('active'); clickedScene.classList.add('active'); } }); document.addEventListener('click', (event) => { if (!event.target.closest('.scene')) { document.querySelector('.gallery-container .scene.active')?.classList.remove('active'); } }); document.querySelectorAll('.modal-overlay').forEach(overlay => { overlay.addEventListener('click', (e) => { if (e.target === overlay || e.target.classList.contains('close-modal')) { overlay.classList.remove('active'); } }); }); }
 
     document.addEventListener('DOMContentLoaded', () => { initImageObserver(); setupEventListeners(); main(); });
 </script>
