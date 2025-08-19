@@ -47,14 +47,12 @@
         #notification-bell svg { width: 32px; height: 32px; fill: #fff; }
         #notification-badge { position: absolute; top: -5px; right: -8px; background-color: #d9534f; color: white; width: 22px; height: 22px; border-radius: 50%; font-size: 0.9em; font-weight: bold; display: none; justify-content: center; align-items: center; border: 2px solid #1a2a3a; }
         #notification-modal .modal-content ul { list-style: none; padding: 0; text-align: right; max-height: 60vh; overflow-y: auto;}
-        #notification-modal .notification-item { padding: 15px; border-bottom: 1px solid #eee; display: flex; gap: 15px;}
-        #notification-modal .sender-img { width: 50px; height: 50px; border-radius: 50%; object-fit: cover; }
+        #notification-list li:first-child { font-weight: bold; }
         #toast { position: fixed; bottom: -100px; left: 50%; transform: translateX(-50%); background: linear-gradient(135deg, #333, #555); color: white; padding: 15px 25px; border-radius: 10px; box-shadow: 0 10px 25px rgba(0,0,0,0.4); z-index: 2000; transition: all 0.6s cubic-bezier(0.68, -0.55, 0.27, 1.55); border-top: 3px solid #ffc107; font-size: 1.1em; }
         #toast.show { bottom: 30px; }
     </style>
 </head>
 <body>
-    
     <header>
         <h1>شهداء فلسطين الأبرار</h1>
         <div id="notification-bell">
@@ -62,148 +60,88 @@
             <span id="notification-badge"></span>
         </div>
     </header>
-
     <div class="controls-container">
         <button id="refresh-btn" class="control-btn"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill="currentColor" d="M17.65 6.35C16.2 4.9 14.21 4 12 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08c-.82 2.33-3.04 4-5.65 4-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/></svg><span>تحديث البيانات</span></button>
-        <button id="clear-cache-btn" class="control-btn"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill="currentColor" d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/></svg><span>مسح كاش المتصفح</span></button>
+        <button id="clear-cache-btn" class="control-btn"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill="currentColor" d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/></svg><span>مسح الكاش</span></button>
     </div>
-
     <section class="stats-container">
         <div class="stat-item"> <div class="stat-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill="currentColor" d="M12 4a4 4 0 1 0 0 8a4 4 0 0 0 0-8zm0 10c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg></div> <div class="stat-label">الرجال</div> <div class="stat-count" id="male-count">0</div> </div>
         <div class="stat-item"> <div class="stat-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill="currentColor" d="M12 5.5A3.5 3.5 0 0 0 8.5 9a3.5 3.5 0 0 0 3.5 3.5a3.5 3.5 0 0 0 3.5-3.5A3.5 3.5 0 0 0 12 5.5zm-4 10.5c0-1.67 2.67-2.5 4-2.5s4 .83 4 2.5V18H8v-2z"/></svg></div> <div class="stat-label">النساء</div> <div class="stat-count" id="female-count">0</div> </div>
         <div class="stat-item"> <div class="stat-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill="currentColor" d="M12 2C9.24 2 7 4.24 7 7s2.24 5 5 5s5-2.24 5-5S14.76 2 12 2zm0 18c-3.31 0-6-2.69-6-6h12c0 3.31-2.69 6-6 6z"/></svg></div> <div class="stat-label">الأطفال</div> <div class="stat-count" id="child-count">0</div> </div>
-        <div class="stat-item"> <div class="stat-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill="currentColor" d="M19.35 10.04C18.67 6.59 15.64 4 12 4 9.11 4 6.6 5.64 5.35 8.04 2.34 8.36 0 10.91 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.65-4.96zM14 13v4h-4v-4H7l5-5 5 5h-3z"/></svg></div> <div class="stat-label">حجم البيانات</div> <div class="stat-count" id="total-size">0 MB</div> </div>
+        <div class="stat-item" style="display: none;"> <div class="stat-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill="currentColor" d="M19.35 10.04C18.67 6.59 15.64 4 12 4 9.11 4 6.6 5.64 5.35 8.04 2.34 8.36 0 10.91 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.65-4.96zM14 13v4h-4v-4H7l5-5 5 5h-3z"/></svg></div> <div class="stat-label">حجم البيانات</div> <div class="stat-count" id="total-size">0 MB</div> </div>
     </section>
-
     <main>
         <div id="martyrs-gallery" class="gallery-container">
-             <p id="loading-message">يتم الآن تحميل أسماء وصور الشهداء...</p>
+             <p id="loading-message">يتم الآن تحميل البيانات...</p>
         </div>
     </main>
-
     <footer><p>رحم الله شهداءنا وأسكنهم فسيح جناته</p></footer>
-
     <div class="modal-overlay" id="image-modal"> <div class="modal-content"> <span class="close-modal">&times;</span> <img id="modal-img" src="" alt="صورة الشهيد"> <h2 id="modal-name"></h2> <p id="modal-message"></p> </div> </div>
-    <div class="modal-overlay" id="notification-modal"> <div class="modal-content"> <span class="close-modal">&times;</span> <h2>الإشعارات</h2> <ul id="notification-list"><li>لا توجد إشعارات حالياً.</li></ul> </div> </div>
+    <div class="modal-overlay" id="notification-modal"> <div class="modal-content"> <span class="close-modal">&times;</span> <h2>الإشعارات</h2> <ul id="notification-list"><li id="no-notifications">لا توجد إشعارات حالياً.</li></ul> </div> </div>
 
 <script>
     // ===================================================================================
-    //  الإصدار 3: الكود الأكثر صلابة وقوة
-    //  - يعالج أخطاء جلب البيانات بشكل أفضل: إذا فشل أحد المصادر، يستمر الآخر.
-    //  - مصمم للعمل بشكل مثالي عند رفعه على خادم ويب (GitHub Pages).
+    //  الإصدار 4: الحل النهائي المبسّط والمستقر
+    //  - الاعتماد على مصدر واحد فقط للبيانات: martyrs.json (أسرع وأكثر موثوقية).
+    //  - تم إلغاء الاعتماد على GitHub API بشكل كامل لحل مشكلة فشل التحميل.
+    //  - تم تفعيل نظام الإشعارات ليعمل فورًا عند تحميل البيانات.
     // ===================================================================================
 
-    // --- CONFIGURATION ---
     const GITHUB_USERNAME = "hassanoooohcu";
     const GITHUB_REPO = "palestine-martyrs-gallery";
     const RAW_GITHUB_BASE = `https://raw.githubusercontent.com/${GITHUB_USERNAME}/${GITHUB_REPO}/main`;
 
     const getCacheBuster = () => `?v=${Date.now()}`;
-    
-    const API_IMAGES_URL = `https://api.github.com/repos/${GITHUB_USERNAME}/${GITHUB_REPO}/contents/images`;
     const DATA_FILE_URL = `${RAW_GITHUB_BASE}/data/martyrs.json`;
-    const NO_PHOTO_IMAGE_URL = `${RAW_GITHUB_BASE}/images/nophoto.jpg`;
+    const IMAGES_BASE_URL = `${RAW_GITHUB_BASE}/images`;
+    const NO_PHOTO_IMAGE_URL = `${IMAGES_BASE_URL}/nophoto.jpg`;
     
-    // --- CORE LOGIC ---
+    let notifications = [];
 
+    // --- تم التبسيط الجذري هنا ---
     async function fetchMartyrsData() {
-        console.log("Fetching data from both API and JSON file using a resilient method...");
-        
-        // نستخدم Promise.allSettled الذي لا يفشل بالكامل إذا فشل طلب واحد
-        const results = await Promise.allSettled([
-            fetch(`${API_IMAGES_URL}${getCacheBuster()}`, { cache: 'no-store' }),
-            fetch(`${DATA_FILE_URL}${getCacheBuster()}`, { cache: 'no-store' })
-        ]);
-
-        let imageFiles = [];
-        let noPhotoMartyrs = [];
-
-        // معالجة نتيجة طلب الصور من API
-        if (results[0].status === 'fulfilled' && results[0].value.ok) {
-            imageFiles = await results[0].value.json();
-            console.log(`Successfully fetched ${imageFiles.length} files from API.`);
-        } else {
-            console.error("Failed to fetch from GitHub API:", results[0].reason || results[0].value.statusText);
+        console.log("Fetching all data from the single JSON file...");
+        const response = await fetch(`${DATA_FILE_URL}${getCacheBuster()}`, { cache: 'no-store' });
+        if (!response.ok) {
+            throw new Error(`Failed to load martyrs.json: ${response.statusText}`);
         }
-
-        // معالجة نتيجة طلب ملف JSON
-        if (results[1].status === 'fulfilled' && results[1].value.ok) {
-            noPhotoMartyrs = await results[1].value.json();
-            console.log(`Successfully fetched ${noPhotoMartyrs.length} records from JSON file.`);
-        } else {
-            console.error("Failed to fetch from JSON file:", results[1].reason || results[1].value.statusText);
-        }
-        
-        if (imageFiles.length === 0 && noPhotoMartyrs.length === 0) {
-            throw new Error("Both data sources failed to load.");
-        }
-
-        return { imageFiles, noPhotoMartyrs };
+        return response.json();
     }
 
     async function main() {
          try {
-            document.getElementById('loading-message').style.display = 'block';
-            document.getElementById('loading-message').textContent = 'جاري جلب أحدث البيانات...';
-            const data = await fetchMartyrsData();
-            const allMartyrs = processAndCombineData(data);
-            renderGallery(allMartyrs);
+            document.getElementById('loading-message').textContent = 'جاري جلب البيانات...';
+            const martyrs = await fetchMartyrsData();
+            renderGallery(martyrs);
+            // --- تفعيل نظام الإشعارات ---
+            showNotification(`تم تحميل بيانات ${martyrs.length} شهيد بنجاح.`);
+
         } catch (error) {
-            console.error("Main function error:", error);
-            document.getElementById('loading-message').textContent = 'فشل تحميل البيانات. الرجاء التأكد من اتصالك بالإنترنت وتحديث الصفحة.';
+            console.error("Fatal Error:", error);
+            document.getElementById('loading-message').textContent = 'فشل تحميل البيانات. الرجاء التأكد من وجود ملف data/martyrs.json وتحديث الصفحة.';
+            showNotification("خطأ: فشل في تحميل البيانات.", true);
         }
     }
     
-    function processAndCombineData(data) {
-        const { imageFiles, noPhotoMartyrs } = data;
-        const allMartyrsMap = new Map();
-        
-        (noPhotoMartyrs || []).forEach(martyr => {
-            const normalized = normalizeName(martyr.name);
-            if (normalized) {
-                allMartyrsMap.set(normalized, { ...martyr, image: NO_PHOTO_IMAGE_URL, size: 0 });
-            }
-        });
-        
-        const filteredImageFiles = (imageFiles || []).filter(f => f.type === 'file' && /\.(jpg|jpeg|png|gif|jfif|webp|bmp)$/i.test(f.name));
-        filteredImageFiles.forEach(file => {
-            const info = parseMartyrInfo(file.name);
-            const normalized = normalizeName(info.name);
-            if (normalized) {
-                allMartyrsMap.set(normalized, { ...info, image: `${RAW_GITHUB_BASE}/images/${file.name}`, size: file.size });
-            }
-        });
-        
-        const martyrsArray = Array.from(allMartyrsMap.values());
-        // فرز بسيط يعتمد على حجم الملف لوضع أصحاب الصور أولاً
-        martyrsArray.sort((a, b) => b.size - a.size); 
-
-        return martyrsArray;
-    }
-
     function renderGallery(martyrs) {
-        const galleryContainer = document.getElementById('martyrs-gallery');
+        const gallery = document.getElementById('martyrs-gallery');
         document.getElementById('loading-message').style.display = 'none';
-        galleryContainer.innerHTML = '';
-        if (!martyrs || martyrs.length === 0) {
-            galleryContainer.innerHTML = '<p>لم يتم العثور على شهداء.</p>';
-            return;
-        }
+        gallery.innerHTML = '';
+        
+        // فرز البيانات: أصحاب الصور أولاً
+        martyrs.sort((a, b) => (a.image && !b.image) ? -1 : (!a.image && b.image) ? 1 : 0);
         
         const fragment = document.createDocumentFragment();
-        let counters = { male: 0, female: 0, child: 0 };
-        let totalSizeBytes = 0;
+        const counters = { male: 0, female: 0, child: 0 };
 
         martyrs.forEach(martyr => {
             if(counters.hasOwnProperty(martyr.type)) counters[martyr.type]++;
-            totalSizeBytes += martyr.size || 0;
             fragment.appendChild(buildMartyrCard(martyr));
         });
 
-        galleryContainer.appendChild(fragment);
-        galleryContainer.querySelectorAll('img[data-src]').forEach(img => imageObserver.observe(img));
+        gallery.appendChild(fragment);
+        gallery.querySelectorAll('img[data-src]').forEach(img => imageObserver.observe(img));
         
-        document.getElementById('total-size').textContent = formatBytes(totalSizeBytes);
         document.getElementById('male-count').textContent = counters.male;
         document.getElementById('female-count').textContent = counters.female;
         document.getElementById('child-count').textContent = counters.child;
@@ -218,20 +156,38 @@
             case 'child': messageText = 'قُدّمت طفولته فداءً لوطنه'; break; 
             default: messageText = 'ضحى بحياته فداءً لوطنه'; break; 
         }
-        const imageUrlWithCacheBuster = `${martyr.image}${getCacheBuster()}`;
-        scene.innerHTML = `<div class="martyr-card"><div class="image-frame"><div class="image-container"><img data-src="${imageUrlWithCacheBuster}" alt="صورة ${martyr.name}" loading="lazy"></div><div class="name-container"><p class="martyr-name">${martyr.name}</p><p class="final-message">${messageText}</p></div></div></div>`;
+        
+        const imageUrl = martyr.image 
+            ? `${IMAGES_BASE_URL}/${martyr.image}` 
+            : NO_PHOTO_IMAGE_URL;
+
+        scene.innerHTML = `<div class="martyr-card"><div class="image-frame"><div class="image-container"><img data-src="${imageUrl}${getCacheBuster()}" alt="صورة ${martyr.name}" loading="lazy"></div><div class="name-container"><p class="martyr-name">${martyr.name}</p><p class="final-message">${messageText}</p></div></div></div>`;
         return scene;
     }
 
+    function showNotification(message, isError = false) {
+        notifications.unshift({ message, date: new Date() });
+        const badge = document.getElementById('notification-badge');
+        const list = document.getElementById('notification-list');
+        
+        badge.textContent = notifications.length;
+        badge.style.display = 'flex';
+        
+        document.getElementById('no-notifications')?.remove();
+        
+        const newItem = document.createElement('li');
+        newItem.textContent = message;
+        if(isError) newItem.style.color = 'red';
+        list.prepend(newItem);
+    }
+    
+    // --- دوال مساعدة (بدون تغيير) ---
     function showToast(message) { document.querySelectorAll('#toast').forEach(t => t.remove()); const toast = document.createElement('div'); toast.id = 'toast'; toast.textContent = message; document.body.appendChild(toast); setTimeout(() => toast.classList.add('show'), 50); setTimeout(() => { toast.classList.remove('show'); setTimeout(() => toast.remove(), 500); }, 5000); }
-    function formatBytes(bytes, decimals = 2) { if (!bytes || bytes === 0) return '0 Bytes'; const k = 1024; const i = Math.floor(Math.log(bytes) / Math.log(k)); return parseFloat((bytes / Math.pow(k, i)).toFixed(decimals)) + ' ' + ['Bytes', 'KB', 'MB', 'GB'][i]; }
-    function parseMartyrInfo(nameString) { let cleanName = decodeURIComponent(nameString).replace(/_/g, ' ').replace(/\.[^/.]+$/, "").trim(); let type = 'male'; if (cleanName.includes('الطفل') || cleanName.includes('الطفلة')) type = 'child'; else if (cleanName.includes('الشهيدة')) type = 'female'; return { name: cleanName, type }; }
-    function normalizeName(name) { return name.replace(/^(الشهيد|الشهيدة|الطفل|الطفلة)\s*/, '').replace(/\s+/g, ' ').trim(); }
     let imageObserver; function initImageObserver() { if (imageObserver) imageObserver.disconnect(); imageObserver = new IntersectionObserver((entries, observer) => { entries.forEach(entry => { if (entry.isIntersecting) { const img = entry.target; img.src = img.dataset.src; img.onload = () => img.classList.add('loaded'); observer.unobserve(img); } }); }, { rootMargin: '0px 0px 200px 0px' }); }
     async function performHardReset() { showToast("بدء مسح كاش المتصفح..."); try { if (window.caches) { const keys = await caches.keys(); await Promise.all(keys.map(key => caches.delete(key))); } showToast("تم مسح الكاش بنجاح! سيتم إعادة تحميل الصفحة."); setTimeout(() => window.location.reload(true), 1500); } catch (err) { showToast("⚠️ حدث خطأ. يرجى إعادة تحميل الصفحة يدويًا."); } }
     
     function setupEventListeners() { 
-        document.getElementById('refresh-btn').addEventListener('click', () => { showToast("جاري تحديث البيانات وإعادة تحميل الصفحة..."); setTimeout(() => { window.location.reload(true); }, 1500); }); 
+        document.getElementById('refresh-btn').addEventListener('click', () => { showToast("جاري تحديث البيانات..."); main(); }); 
         document.getElementById('clear-cache-btn').addEventListener('click', performHardReset); 
         const imageModal = document.getElementById('image-modal'); 
         const galleryContainer = document.getElementById('martyrs-gallery'); 
@@ -241,12 +197,7 @@
         document.querySelectorAll('.modal-overlay').forEach(overlay => { overlay.addEventListener('click', (e) => { if (e.target === overlay || e.target.classList.contains('close-modal')) { overlay.classList.remove('active'); } }); }); 
     }
     
-    document.addEventListener('DOMContentLoaded', () => { 
-        initImageObserver(); 
-        setupEventListeners(); 
-        main(); 
-    });
+    document.addEventListener('DOMContentLoaded', () => { initImageObserver(); setupEventListeners(); main(); });
 </script>
-
 </body>
 </html>
