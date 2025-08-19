@@ -1,401 +1,500 @@
-<!DOCTYPE html>
-<html lang="ar" dir="rtl">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>شهداء فلسطين الأبرار</title>
-    
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700;900&display=swap" rel="stylesheet">
-
-    <style>
-        body { font-family: 'Tajawal', sans-serif; background-color: #f0f2f5; color: #333; margin: 0; padding: 0; text-align: center; }
-        header { background-color: #1a2a3a; color: white; padding: 15px 20px; border-bottom: 4px solid #4a90e2; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 999; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
-        header h1 { margin: 0; font-size: 1.8em; }
-        .controls-container { padding: 15px; background-color: #e9ecef; border-bottom: 1px solid #ddd; display: flex; justify-content: center; gap: 15px; flex-wrap: wrap; }
-        .control-btn { background-color: #007bff; color: white; border: none; padding: 10px 20px; font-family: 'Tajawal', sans-serif; font-size: 1em; font-weight: bold; border-radius: 8px; cursor: pointer; transition: background-color 0.3s, transform 0.2s; display: inline-flex; align-items: center; gap: 8px; }
-        .control-btn:hover { transform: translateY(-2px); }
-        #clear-cache-btn { background-color: #dc3545; }
-        .stats-container { background-color: #f8f9fa; padding: 20px; display: flex; justify-content: space-around; align-items: center; flex-wrap: wrap; gap: 20px; border-bottom: 1px solid #ddd; margin-bottom: 40px; }
-        .stat-item { display: flex; flex-direction: column; align-items: center; }
-        .stat-icon svg { width: 48px; height: 48px; fill: #343a40; }
-        .stat-label { font-size: 1em; color: #555; margin-top: 5px; }
-        .stat-count { font-size: 2em; font-weight: 900; color: #1a2a3a; }
-        .gallery-container { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 40px; padding: 20px; max-width: 1300px; margin: 0 auto; min-height: 200px; }
-        .scene { width: 100%; height: 420px; perspective: 1000px; }
-        .martyr-card { width: 100%; height: 100%; position: relative; transform-style: preserve-3d; transition: transform 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94); cursor: pointer; }
-        .scene.active .martyr-card, .scene:hover .martyr-card { transform: rotateY(10deg) scale(1.05); }
-        .image-frame { position: absolute; width: 100%; height: 100%; background: linear-gradient(145deg, #e6e6e6, #ffffff); border-radius: 15px; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2), inset 0 0 15px rgba(0, 0, 0, 0.3); display: flex; flex-direction: column; overflow: hidden; }
-        .image-container { width: calc(100% - 20px); height: 75%; margin: 10px; position: relative; border-radius: 8px; overflow: hidden; box-shadow: 0 5px 15px rgba(0,0,0,0.2); }
-        .martyr-card img { width: 100%; height: 100%; object-fit: cover; display: block; transition: opacity 0.4s ease-in-out; opacity: 0; }
-        .martyr-card img.loaded { opacity: 1; }
-        .name-container { height: 25%; position: relative; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 0 10px; }
-        .martyr-name { font-size: 1.5em; font-weight: 900; color: #1a2a3a; margin: 0; }
-        .final-message { font-size: 1.1em; color: #d9534f; font-weight: bold; margin-top: 5px; opacity: 0; transition: opacity 0.4s ease 0.2s; }
-        .scene.active .final-message, .scene:hover .final-message { opacity: 1; }
-        footer { margin-top: 40px; padding: 20px; background-color: #1a2a3a; color: white; }
-        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.85); display: none; justify-content: center; align-items: center; z-index: 1000; opacity: 0; transition: opacity 0.5s; }
-        .modal-overlay.active { display: flex; opacity: 1; }
-        .modal-content { background: #fff; padding: 30px; border-radius: 15px; box-shadow: 0 15px 40px rgba(0,0,0,0.5); position: relative; width: 90%; max-width: 500px; text-align: center; }
-        .modal-content img { max-width: 100%; height: auto; max-height: 60vh; border-radius: 10px; margin-bottom: 20px; border: 2px solid #ddd; object-fit: contain; }
-        .modal-content h2 { font-size: 2em; color: #1a2a3a; margin: 10px 0; }
-        .modal-content p { font-size: 1.2em; color: #d9534f; font-weight: bold; }
-        .close-modal { position: absolute; top: 10px; left: 20px; font-size: 3em; color: #aaa; cursor: pointer; }
-        #notification-bell { position: relative; cursor: pointer; }
-        #notification-bell svg { width: 32px; height: 32px; fill: #fff; }
-        #notification-badge { position: absolute; top: -5px; right: -8px; background-color: #d9534f; color: white; width: 22px; height: 22px; border-radius: 50%; font-size: 0.9em; font-weight: bold; display: none; justify-content: center; align-items: center; border: 2px solid #1a2a3a; }
-        #notification-modal .modal-content ul { list-style: none; padding: 0; text-align: right; max-height: 60vh; overflow-y: auto;}
-        #notification-modal .notification-item { padding: 15px; border-bottom: 1px solid #eee; display: flex; gap: 15px;}
-        #notification-modal .sender-img { width: 50px; height: 50px; border-radius: 50%; object-fit: cover; }
-        #toast { position: fixed; bottom: -100px; left: 50%; transform: translateX(-50%); background: linear-gradient(135deg, #333, #555); color: white; padding: 15px 25px; border-radius: 10px; box-shadow: 0 10px 25px rgba(0,0,0,0.4); z-index: 2000; transition: all 0.6s cubic-bezier(0.68, -0.55, 0.27, 1.55); border-top: 3px solid #ffc107; font-size: 1.1em; }
-        #toast.show { bottom: 30px; }
-    </style>
-</head>
-<body>
-    
-    <header>
-        <h1>شهداء فلسطين الأبرار</h1>
-        <div id="notification-bell">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill="currentColor" d="M12 22c1.1 0 2-.9 2-2h-4c0 1.1.9 2 2 2zm6-6v-5c0-3.07-1.63-5.64-4.5-6.32V4c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v.68C7.64 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2z"/></svg>
-            <span id="notification-badge"></span>
-        </div>
-    </header>
-
-    <div class="controls-container">
-        <button id="refresh-btn" class="control-btn"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill="currentColor" d="M17.65 6.35C16.2 4.9 14.21 4 12 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08c-.82 2.33-3.04 4-5.65 4-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/></svg><span>تحديث شامل</span></button>
-        <button id="clear-cache-btn" class="control-btn"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill="currentColor" d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/></svg><span>مسح الصور فقط</span></button>
-    </div>
-
-    <section class="stats-container">
-        <!-- Stats items remain the same -->
-    </section>
-
-    <main>
-        <div id="martyrs-gallery" class="gallery-container">
-             <p id="loading-message">يتم الآن تحميل أسماء وصور الشهداء...</p>
-        </div>
-    </main>
-
-    <footer><p>رحم الله شهداءنا وأسكنهم فسيح جناته</p></footer>
-
-    <!-- Modals remain the same -->
-
-    <script>
-        // --- CONFIGURATION ---
-        const GITHUB_USERNAME = "hassanoooohcu";
-        const GITHUB_REPO = "palestine-martyrs-gallery";
-        const RAW_GITHUB_BASE = `https://raw.githubusercontent.com/${GITHUB_USERNAME}/${GITHUB_REPO}/main`;
-        
-        const apiUrl = `https://api.github.com/repos/${GITHUB_USERNAME}/${GITHUB_REPO}/contents/images`;
-        const noPhotoListUrl = `${RAW_GITHUB_BASE}/images/nophoto.text`;
-        const NO_PHOTO_IMAGE_URL = `${RAW_GITHUB_BASE}/images/nophoto.jpg`;
-        const messagesUrl = `${RAW_GITHUB_BASE}/images/messages.txt`;
-
-        let lastMessagesTxt = "";
-
-        const galleryContainer = document.getElementById('martyrs-gallery');
-        if ('serviceWorker' in navigator) { window.addEventListener('load', () => { navigator.serviceWorker.register('./sw.js').catch(err => console.error('SW registration failed:', err)); }); }
-        
-        function showToast(message) { /* ... same as before ... */ }
-        function formatBytes(bytes, decimals = 2) { /* ... same as before ... */ }
-        function parseMartyrInfo(nameString) { /* ... same as before ... */ }
-        function normalizeName(name) { /* ... same as before ... */ }
-
-        // --- CORE LOGIC ---
-        let imageObserver;
-        function initImageObserver() { /* ... same as before ... */ }
-        async function fetchMartyrsData(forceNetwork) { /* ... same as before ... */ }
-        function processAndCombineData(data) { /* ... same as before (with sorting) ... */ }
-        function renderGallery(martyrs) { /* ... same as before ... */ }
-        function buildMartyrCard(martyr) { /* ... same as before ... */ }
-        async function main(force = false) { /* ... same as before ... */ }
-        async function applyNotifications() { /* ... same as before ... */ }
-        function startNotificationMonitoring() { /* ... same as before ... */ }
-
-        // --- وظائف المسح الجديدة ---
-
-        // 1. وظيفة المسح الشامل "الحادة" (لزر التحديث الشامل)
-        async function performHardReset(actionMessage) {
-            showToast(actionMessage);
-            try {
-                sessionStorage.clear();
-                localStorage.clear();
-                console.log("تم مسح التخزين المحلي والجلسة.");
-
-                if (window.caches) {
-                    const keys = await caches.keys();
-                    for (const key of keys) {
-                        await caches.delete(key);
-                        console.log(`تم حذف الكاش: ${key}`);
-                    }
-                }
-                if ('serviceWorker' in navigator) {
-                    const registrations = await navigator.serviceWorker.getRegistrations();
-                    for (const registration of registrations) {
-                        await registration.unregister();
-                        console.log(`تم إلغاء تسجيل Service Worker: ${registration.scope}`);
-                    }
-                }
-                setTimeout(() => {
-                    showToast("اكتمل المسح. جاري إعادة تشغيل الصفحة...");
-                    window.location.reload(true);
-                }, 2500);
-
-            } catch (err) {
-                console.error("فشل في عملية المسح الشامل:", err);
-                showToast("⚠️ حدث خطأ أثناء المسح. يرجى إعادة تحميل الصفحة يدويًا.");
-            }
-        }
-
-        // 2. وظيفة المسح الدقيق للصور فقط (لزر مسح الصور)
-        function clearImageCacheAndReload() {
-            if (!('serviceWorker' in navigator && navigator.serviceWorker.controller)) {
-                showToast('Service Worker غير جاهز بعد. يرجى المحاولة بعد لحظات.');
-                return;
-            }
-
-            showToast('جاري مسح كاش الصور...');
-            
-            // إرسال الأمر الجديد المخصص للـ Service Worker
-            navigator.serviceWorker.controller.postMessage({ action: 'clear_image_cache' });
-
-            // الاستماع لرسالة التأكيد
-            navigator.serviceWorker.addEventListener('message', function handler(event) {
-                if (event.data && event.data.status === 'image_cache_cleared') {
-                    showToast('تم مسح الصور بنجاح. سيتم إعادة تحميل الصفحة...');
-                    setTimeout(() => {
-                        window.location.reload();
-                    }, 1500);
-                    navigator.serviceWorker.removeEventListener('message', handler);
-                }
-            });
-        }
-
-        function setupEventListeners() {
-            document.getElementById('refresh-btn').addEventListener('click', () => {
-                performHardReset("بدء التحديث الشامل...");
-            });
-            
-            document.getElementById('clear-cache-btn').addEventListener('click', () => {
-                clearImageCacheAndReload();
-            });
-            
-            const imageModal = document.getElementById('image-modal');
-            galleryContainer.addEventListener('click', (event) => { /* ... same as before ... */ });
-
-            document.addEventListener('click', (event) => { /* ... same as before ... */ });
-            document.getElementById('notification-bell').addEventListener('click', () => { /* ... same as before ... */ });
-            document.querySelectorAll('.modal-overlay').forEach(overlay => { /* ... same as before ... */ });
-        }
-        
-        // --- INITIALIZATION ---
-        document.addEventListener('DOMContentLoaded', () => {
-            initImageObserver();
-            setupEventListeners();
-            main(false);
-            applyNotifications();
-            startNotificationMonitoring();
-        });
-
-        // --- Re-paste unchanged functions here to have full code ---
-        // (The functions marked with /* ... same as before ... */ should be pasted here in full)
-        
-        function showToast(message) {
-            document.querySelectorAll('#toast').forEach(t => t.remove());
-            const toast = document.createElement('div');
-            toast.id = 'toast';
-            toast.textContent = message;
-            document.body.appendChild(toast);
-            setTimeout(() => toast.classList.add('show'), 50);
-            setTimeout(() => {
-                toast.classList.remove('show');
-                setTimeout(() => toast.remove(), 500);
-            }, 5000);
-        }
-
-        function formatBytes(bytes, decimals = 2) {
-            if (!bytes || bytes === 0) return '0 Bytes';
-            const k = 1024;
-            const i = Math.floor(Math.log(bytes) / Math.log(k));
-            return parseFloat((bytes / Math.pow(k, i)).toFixed(decimals)) + ' ' + ['Bytes','KB','MB','GB'][i];
-        }
-
-        function parseMartyrInfo(nameString) {
-            let cleanName = decodeURIComponent(nameString).replace(/_/g, ' ').replace(/\.[^/.]+$/, "").trim();
-            let type = 'male';
-            if (cleanName.includes('الطفل') || cleanName.includes('الطفلة')) type = 'child';
-            else if (cleanName.includes('الشهيدة')) type = 'female';
-            return { name: cleanName, type };
-        }
-
-        function normalizeName(name) {
-            return name.replace(/^(الشهيد|الشهيدة|الطفل|الطفلة)\s*/, '').replace(/\s+/g, ' ').trim();
-        }
-
-        function initImageObserver() {
-            if (imageObserver) imageObserver.disconnect();
-            imageObserver = new IntersectionObserver((entries, observer) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        const img = entry.target;
-                        img.src = img.dataset.src;
-                        img.onload = () => img.classList.add('loaded');
-                        observer.unobserve(img);
-                    }
-                });
-            }, { rootMargin: '0px 0px 200px 0px' });
-        }
-
-        async function fetchMartyrsData(forceNetwork) {
-            const cacheKey = 'martyrs_api_data';
-            const cachedData = sessionStorage.getItem(cacheKey);
-            if (cachedData && !forceNetwork) {
-                return JSON.parse(cachedData);
-            }
-            try {
-                const fetchOptions = { cache: 'no-cache' };
-                const [apiResponse, noPhotoResponse] = await Promise.all([
-                    fetch(`${apiUrl}?t=${Date.now()}`, fetchOptions),
-                    fetch(`${noPhotoListUrl}?t=${Date.now()}`, fetchOptions)
-                ]);
-
-                if (!apiResponse.ok) throw new Error(`API Error: ${apiResponse.statusText}`);
-                const files = await apiResponse.json();
-                
-                let noPhotoNames = [];
-                if (noPhotoResponse.ok) {
-                    const text = await noPhotoResponse.text();
-                    noPhotoNames = text.split('\n').map(n => n.trim()).filter(Boolean);
-                }
-                const dataToStore = { files, noPhotoNames };
-                sessionStorage.setItem(cacheKey, JSON.stringify(dataToStore));
-                return dataToStore;
-
-            } catch (error) {
-                console.error("Failed to fetch martyrs data:", error);
-                if (cachedData) {
-                    showToast('فشل التحديث، تم عرض البيانات القديمة.');
-                    return JSON.parse(cachedData);
-                }
-                throw error;
-            }
-        }
-
-        function processAndCombineData(data) {
-            const allMartyrsMap = new Map();
-            const imageFiles = (data.files || []).filter(f => f.type === 'file' && /\.(jpg|jpeg|png|gif|jfif|webp|bmp)$/i.test(f.name));
-
-            (data.noPhotoNames || []).forEach(name => {
-                const info = parseMartyrInfo(name);
-                const normalized = normalizeName(info.name);
-                if (normalized) {
-                    allMartyrsMap.set(normalized, { ...info, image: NO_PHOTO_IMAGE_URL, size: 0 });
-                }
-            });
-
-            imageFiles.forEach(file => {
-                const info = parseMartyrInfo(file.name);
-                const normalized = normalizeName(info.name);
-                if (normalized) {
-                    allMartyrsMap.set(normalized, { ...info, image: `${RAW_GITHUB_BASE}/images/${file.name}`, size: file.size });
-                }
-            });
-
-            const martyrsWithImages = [];
-            const martyrsWithoutImages = [];
-
-            allMartyrsMap.forEach(martyr => {
-                if (martyr.image === NO_PHOTO_IMAGE_URL) {
-                    martyrsWithoutImages.push(martyr);
-                } else {
-                    martyrsWithImages.push(martyr);
-                }
-            });
-            
-            return martyrsWithImages.concat(martyrsWithoutImages);
-        }
-
-        function renderGallery(martyrs) {
-            const loadingMsgEl = document.getElementById('loading-message');
-            if (loadingMsgEl) loadingMsgEl.style.display = 'none';
-
-            galleryContainer.innerHTML = '';
-            if (!martyrs || martyrs.length === 0) {
-                galleryContainer.innerHTML = '<p>لم يتم العثور على شهداء.</p>';
-                return;
-            }
-
-            const fragment = document.createDocumentFragment();
-            let counters = { male: 0, female: 0, child: 0 };
-            let totalSizeBytes = 0;
-
-            martyrs.forEach(martyr => {
-                counters[martyr.type]++;
-                totalSizeBytes += martyr.size || 0;
-                fragment.appendChild(buildMartyrCard(martyr));
-            });
-            
-            galleryContainer.appendChild(fragment);
-            galleryContainer.querySelectorAll('img[data-src]').forEach(img => imageObserver.observe(img));
-            document.getElementById('total-size').textContent = formatBytes(totalSizeBytes);
-            document.getElementById('male-count').textContent = counters.male;
-            document.getElementById('female-count').textContent = counters.female;
-            document.getElementById('child-count').textContent = counters.child;
-        }
-
-        function buildMartyrCard(martyr) {
-            const scene = document.createElement('div');
-            scene.className = 'scene';
-            let messageText;
-            switch (martyr.type) {
-                case 'female': messageText = 'ضحت بحياتها فداءً لوطنها'; break;
-                case 'child': messageText = 'قُدّمت طفولته فداءً لوطنه'; break;
-                default: messageText = 'ضحى بحياته فداءً لوطنه'; break;
-            }
-            scene.innerHTML = `<div class="martyr-card"><div class="image-frame"><div class="image-container"><img data-src="${martyr.image}" alt="صورة ${martyr.name}" loading="lazy"></div><div class="name-container"><p class="martyr-name">${martyr.name}</p><p class="final-message">${messageText}</p></div></div></div>`;
-            return scene;
-        }
-
-        async function main(force = false) {
-             try {
-                const data = await fetchMartyrsData(force);
-                renderGallery(processAndCombineData(data));
-            } catch (error) {
-                const loadingMsgEl = document.getElementById('loading-message');
-                if (loadingMsgEl) loadingMsgEl.textContent = 'فشل تحميل البيانات. الرجاء المحاولة لاحقاً.';
-                console.error("Main function failed:", error);
-            }
-        }
-
-        async function applyNotifications() {
-            if (!navigator.onLine) return;
-            try {
-                const response = await fetch(`${messagesUrl}?t=${Date.now()}`, { cache: 'no-cache' });
-                if (!response.ok) return;
-                const messagesText = await response.text();
-                if (messagesText === lastMessagesTxt) return;
-                lastMessagesTxt = messagesText;
-                const badge = document.getElementById('notification-badge'), list = document.getElementById('notification-list');
-                const notifications = messagesText.split('\n').filter(l => l.trim().length > 5);
-                
-                if (notifications.length > 0) {
-                    badge.textContent = notifications.length; badge.style.display = 'flex';
-                    list.innerHTML = notifications.map(n => {
-                        const [sender, ...messageParts] = n.split(':');
-                        const message = messageParts.join(':').trim();
-                        return `<li class="notification-item"><img src="${RAW_GITHUB_BASE}/images/hsn1.png" class="sender-img" alt="Sender"><div><b>${sender.trim()}:</b> ${message}</div></li>`;
-                    }).join('');
-                } else {
-                    badge.style.display = 'none';
-                    list.innerHTML = '<li>لا توجد إشعارات جديدة.</li>';
-                }
-            } catch(e) { console.error("Error fetching notifications:", e); }
-        }
-
-        function startNotificationMonitoring() {
-            setInterval(applyNotifications, 60000);
-        }
-    </script>
-</body>
-</html>
+الشهيد محمد عمر رمضان غبن
+الشهيد محمد هشام محمد ابودغيم
+الشهيد حسام هشام محمد أبو دغيم
+الشهيد محمود توفيق محمد السنوار
+الشهيد يوسف رمضان شحده ابو الحسنه
+الشهيد حمزة محمد عبد القادر الكحلوت
+الشهيد صالح محمد عبد الفتاح عوده
+الشهيد طارق خالد ابراهيم أبو درابي
+الشهيد محمد ماجد خليل ابو درابي
+الشهيد سائد خالد ابراهيم ابو درابي
+الشهيد مصطفى ابراهيم خليل ابو درابي
+الشهيد خالد إبراهيم خليل أبو درابي
+الشهيد عماد سليمان شاكر الجمال
+الشهيد محمد بهجت حسين السحار
+الشهيد بلال خميس عبد البنا
+الشهيد محمد اسماعيل يونس منصور
+الشهيد جميل غازي عبد سلمان
+الشهيد عاهد نافذ حسن ايوب
+الشهيد احمد محمد ياسين عاشور
+الشهيد عمر بلال سعيد لبد
+الشهيد بلال رمضان رجب دكه
+الشهيدة عليا أحمد محمد رمضان
+الشهيد عمر محمد رفيق نصر
+الشهيد عماد ياسين أحمد عاشور
+الشهيد عيد حسين ابراهيم ابو حبل
+الشهيد عبد القادر محمد إبراهيم أبو حبل
+الشهيد محمد حسن ابراهيم ابو حبل
+الشهيد محمد غسان محمود أبو حبل
+الشهيد ابراهيم حسين ابراهيم ابو حبل
+الشهيد اشرف جمال عبد الرحمن المبحوح
+الشهيد مهدي طه جمعه عفانة
+الشهيد هارون اسحاق يوسف مسلم
+الشهيد محمد ميسر أحمد بدر
+الشهيد محمود وحيد عايش ابو القمصان
+الشهيد محمود محمد ابراهيم ثاري
+الشهيد فارس أحمد محمد اللوح
+الشهيدة اجنادين محمود عبد الخالق خلة
+الشهيد نضال زهير زكريا سليمان
+الشهيد محمد مأمون نافذ السقا
+الشهيد نافذ محمود نافذ جنديه
+الطفل الشهيد عبد الرحمن عثمان سالم ابو عويضه
+الطفل الشهيد تيسير بكر تيسير رمضان
+الشهيد امين سهيل محمد كيلاني
+الشهيد نظير عبد موسى شبات
+الشهيد محمد وائل عبد المجيد علي
+الشهيد اياد سمير خميس الحواجري
+الشهيد أحمد احسان عبد علي
+الشهيد ثائر اشرف عبدربه الكيلاني
+الشهيد مصطفى ابراهيم فتحي ابو علي
+الشهيد عبدالعزيز ابراهيم فتحي ابو علي
+الشهيد ياسر موسى حسن زايد
+الشهيد محمود موسى عبد الوهاب العطل
+الشهيدة ولاء محمد رشاد الاسطل
+الشهيد دياب عبد الرحمن اديب الهواري
+الشهيد محمد ناصر محمد ابو عطيوي
+الشهيد مهران عنان ديب عبد ربه داود
+الطفلة الشهيدة لين محمد رشاد الاسطل
+الطفلة الشهيدة ندى محمد رشاد الاسطل
+الطفل الشهيد وليد محمد رشاد الاسطل
+الشهيدة ناديه وليد محمد الاسطل
+الشهيد محمد رشاد محمد الاسطل
+الشهيدة وفاء علي حسين احمد
+الشهيد رامي عبد العزيز عبد الرحمن شكيان
+الشهيد تامر عطيه عيد محارب
+الشهيد سائد وصفي حسان الغفير
+الشهيد محمد حمدين مسلم الجرابعه
+الشهيد هاني ناجي مسلم ابو خاطر
+الشهيد محمد ابراهيم محمد الخطيب
+الشهيدة نسرين فؤاد عبد المعطي محارب
+الشهيد محمد فايز عبد المعطي الشرفا
+الشهيد محمد شعبان محمد الاي
+الشهيدة امل أحمد مبارك ابو نوفل
+الشهيد أحمد جلال حسن ابو عطيوي
+الشهيد يوسف محمد علي ياسين
+الشهيد شادي عزمي حسن عفانة
+الشهيد جبر أحمد مبارك ابو نوفل
+الشهيد سعيد خليل سعيد خضير
+الشهيد يوسف صائب خليل عز الدين
+الشهيد صخر اسماعيل أحمد الزعانين
+الشهيد محمود معمر رمضان خلة
+الطفل الشهيد عليان عماد عليان عليوه
+الطفل الشهيد عبد الله محمد هاشم اسليم
+الشهيد محمد رشيد عكه
+الشهيد أشرف محمد فخري عبد أبو وردة
+الشهيد سامر حمدي خضر قحمان
+الشهيد يوسف حسني خليل نبهان
+الشهيد شعبان عبد الرحمن شعبان غبن
+الشهيد مدحت عطا عبد الوهاب المصري
+الشهيدة صباح أحمد محمد عزام
+الشهيد محمد علي حسن عفانة
+الشهيد تحرير عمر خميس المصري
+الشهيد حمدي سعيد يوسف طولان
+الشهيد محمد حسن توفيق التتري
+الشهيد فتحي نصر محمد ابو نصير
+الشهيد ثائر جلال عبد القادر صالح
+الشهيد موسى سالم محمد عطوه
+الشهيد زياد أحمد محمد النجار
+الشهيدة غاده عزات حسان اسليم
+الشهيد فيصل محمد عبد الرحمن المطوق
+الشهيد طلعت أحمد محمد علي
+الشهيد فضل سليمان محمد ابو غنايم
+الشهيد رائد ماهر محمود الحداد
+الشهيد محمد أحمد يوسف حمادة
+الشهيد جهاد موسى محمد غبن
+الشهيد أحمد وائل عفيف عليان
+الشهيد عبدالهادي خالد عبد الهادي صباح
+الشهيدة سماح يوسف عبيد النعامي
+الشهيد مصطفى اسحق محمد النجار
+الشهيد عبيد يوسف عبيد النعامي
+الشهيد ياسر اشرف محمد جودة
+الشهيد محمد يوسف عبيد النعامي
+الشهيد ثائر عصام الدين سليم أبو عيطه
+الشهيد محمد أكرم يوسف مقبل
+الشهيدة ياسمين يوسف عبيد النعامي
+الشهيد بلال يوسف عبيد النعامي
+الشهيد انس يوسف عبيد النعامي
+الشهيد نور الدين نعمان عبدالله دغمش
+الشهيد صابر تامر حازب ابوضاهر
+الشهيد جهاد اشرف جهاد ابو ديه
+الشهيد اسامه يوسف عبيد النعامي
+الشهيد محمد ايهاب وحيد زنون
+الطفل الشهيد معتز محمد هاشم اسليم
+الطفل الشهيد محمود محمد محمد العريني
+الطفل الشهيد أنس ناصر ياسين الصاوي
+الطفل الشهيد كرم عصام الدين سليم ابو عيطه
+الطفلة الشهيدة رهف أحمد عبيد النعامي
+الشهيد تامر شفيق نعمان صبح
+الشهيد بلال محمود فؤاد ابو مطر
+الشهيد عادل حسن وجيه الشنطي
+الشهيد عطايا عمر خميس جابر
+الشهيد عطايا عيسى فؤاد جابر
+الشهيد جهاد زير عطا الرضيع
+الشهيد اشرف خالد نجيب اليازجي
+الشهيد مجد محمد موسى الدعبله
+الشهيد عبد الله محمود أحمد ابو المعزه
+الشهيد أحمد فايز أحمد ابو المعزه
+الشهيد خالد محمد أحمد العطار
+الشهيد حسام الدين عبد سليم المصري
+الشهيد ابراهيم محمد ابراهيم الزين
+الشهيد محمد سمير عبد الرازق المجدلاوي
+الشهيد يحيى سمير عبد الرازق المجدلاوي
+الشهيد عبد الرازق سمير عبد الرازق المجدلاوي
+الشهيد صهيب روحي محمود عكاشه
+الشهيد معتز ابراهيم حسان البسيونى
+الشهيد محمود أحمد شعبان الزهيري
+الشهيد عدنان محمد نازك أحمد الكفارنه
+الشهيد عبد ربه ابراهيم خليل ابو درابي
+الشهيد علاء جبر محمود أبو سيسي
+الطفلة الشهيدة اسماء اياد عبدالله ريحان
+الطفلة الشهيدة فرح اياد عبدالله ريحان
+الطفلة الشهيدة اية رياض محمد حلاوه
+الطفلة الشهيدة ريما محمد رياض حلاوه
+الطفلة الشهيدة روضه محمد رياض حلاوه
+الطفلة الشهيدة رقيه محمد رياض حلاوه
+الطفل الشهيد صبح محمد رياض حلاوه
+الشهيد احسان محمود حسين نبهان
+الشهيد عوض محمد عوض الحواجري
+الشهيد محمد هاشم محمد اسليم
+الشهيد غالب عبد القادر حافظ ورش اغا
+الشهيد هيثم اسماعيل حسن العفيفي
+الشهيد هاني محمد محمود أبو سيسي
+الشهيد حسين محمد محمود ابوالسيسي
+الشهيد كرم معين حسين عفانة
+الشهيد عبد الكريم جبر محمود أبو سيسي
+الشهيد رياض محمد صبح حلاوه
+الشهيد نضال نصر ديب ابو بيض
+الشهيدة نرمان عطا صبح حلاوه
+الشهيدة رنا حسن صالح برزق
+الشهيد خضر محمد سليم البنا
+الشهيدة ختام عزات حسان اسليم
+الشهيدة ميادة عيسى قاسم ابو بيض
+الشهيد اسلام عبد الحليم عبد الحميد الباز
+الشهيد أحمد حسين أحمد الغماري
+الشهيد سامي نصر ديب ابو بيض
+الشهيد شادي حربي فرج دغمش
+الشهيدة سميه جمعه ربيع حلاوه
+الشهيد محمد ناصر حسن حسان
+الشهيد عبد الكريم سفيان خالد قزعاط
+الشهيدة ايناس اسامه كامل ابو بيض
+الشهيد عائد رياض محمد حلاوة
+الشهيد هيثم اعتماد انور برزق
+الشهيد كاظم رياض محمد حلاوه
+الشهيدة دعاء كمال طلب صالح
+الشهيد محمود رجب صبح حلاوه
+الشهيد يحيى زكريا سالم دغمش
+الشهيد عبد الرحمن يوسف محمد العر
+الشهيدة أسماء هاني محمد حسين
+الشهيد محمود محمد هاشم اسليم
+الشهيدة فاطمة رياض محمد حلاوه
+الشهيدة اسراء محمد عاشور حلاوه
+الشهيد أحمد راضي محمد قدوحه
+الطفلة الشهيدة رشا وليد محمد حسين
+الطفل الشهيد محمد غياض سلمان ابومحارب
+الطفلة الشهيدة دعاء هاني محمد حسين
+الطفل الشهيد يوسف ابراهيم سلمان ابومحارب
+الطفلة الشهيدة تالا أحمد ياسر السحار
+الطفلة الشهيدة ميرا مروان محارب ابو عصر
+الطفلة الشهيدة نرمان محمد رياض حلاوه
+الطفل الشهيد رياض محمد رياض حلاوه
+الطفل الشهيد يوسف بلال محمد حرارة
+الطفل الشهيد يزن عبد الرحيم هشام الدهشان
+الطفل الشهيد يوسف عبد الرحيم هشام الدهشان
+الطفلة الشهيدة آية محمد يحيى ابو نعمه
+الطفلة الشهيدة ملاك مروان محمد حلاوه
+الشهيد حسن محمود حسن سمور
+الشهيد أحمد وائل درويش أبو جلاله
+الشهيد عبد السلام محمد صباح ابو راشد
+الشهيدة رغده نبيل حماد الدقس
+الشهيدة شرين عبد العزيز شاكر الدقس
+الطفل الشهيد عمر عبد الرحيم محمد الدقس
+الطفلة الشهيدة ريماس عبد الرحيم محمد الدقس
+الطفلة الشهيدة رزان ياسر محمد الدقس
+الشهيدة ماريا ياسر محمد الدقس
+الشهيد فارس خليل ابراهيم الهودلي
+الشهيد عبد المجيد خليل سعود ابو العيش
+الشهيد ناصر حسن محمد الدباغ
+الشهيد عبد الرحمن محمد عبد الرحمن حماد
+الشهيد عائد عوض ديب حجازي
+الشهيد وجيه عادل أحمد صبيح
+الشهيد أحمد حسن محمود سمور
+الشهيد عماد حسن أحمد الحلاق
+الشهيد بلال كامل طه قاسم
+الشهيد عبد العزيز عثمان شاكر ابو عجوه
+الشهيد محمد مدحت سعيد زيد
+الشهيد عمار صبحي راغب عماره
+الشهيد محمود محمد ناصر عايش ابو عاصي
+الشهيد علاء رشاد حماد الواديه
+الشهيد يوسف محمد يوسف فياض
+الشهيدة حنان عطا أحمد دلول
+الشهيد هشام محمد خليل الدهشان
+الشهيدة منى ابراهيم محمود الزيتونيه
+الشهيد ابراهيم أحمد خالد عليوة
+الشهيدة ختام حمدي محمد نصر
+الشهيدة الفت محمد العربي أحمد اسليم
+الشهيد محمد فوزي أحمد النجمي
+الشهيد محمود ابراهيم حمد الله حموده
+الشهيد محمود اكرم محمد دلول
+الشهيد أحمد علي محمد العطل
+الشهيد أحمد فايز حسن عسليه
+الشهيد عبد الرحيم هشام محمد الدهشان
+الشهيد حسن محمود محمد ابوزينة
+الشهيدة صابرين عوني حامد الزيتونية
+الشهيد أيمن علي ابراهيم دلول
+الشهيدة ريم فخري فتحي اسليم
+الشهيد محمد هاني زكي شقوره
+الشهيدة ثريا هشام محمد الدهشان
+الشهيد سامح هشام محمد الدهشان
+الشهيدة سجى محمد موسى عاشور
+الشهيد اشرف فخري فتحي اسليم
+الشهيد صهيب علي كمال ابو جلاله
+الشهيدة فرح أحمد فتحي اسليم
+الشهيدة بسمه هشام محمد الدهشان
+الطفلة الشهيدة هديل هاني فتحي اسليم
+الطفل الشهيد اسامة أحمد ابراهيم دلول
+الطفلة الشهيدة منه الله فخري فتحي اسليم
+الطفل الشهيد محمد أحمد يونس احمد
+الطفل الشهيد ماهر أحمد فتحي اسليم
+الطفل الشهيد عبد الرؤوف محمد عبد الرؤوف حماده
+الطفل الشهيد فايز رمضان فايز دلول
+الطفل الشهيد تامر محمود اكرم دلول
+الطفلة الشهيدة علياء زكريا سالم النواتي
+الطفل الشهيد فادي أحمد فتحي اسليم
+الطفلة الشهيدة سندس أحمد ابراهيم دلول
+الطفل الشهيد محمد أحمد فتحي اسليم
+الطفل الشهيد أدهم عماد ادهم العلول
+الطفل الشهيد ايهاب فخري فتحي اسليم
+الطفلة الشهيدة سلوى عماد ادهم العلول
+الطفلة الشهيدة ماسة حسين طلال البطش
+الطفل الشهيد أدهم اياد ماجد ضاهر
+الشهيد زين علي توفيق عطاطرة
+الشهيد ابراهيم جمال ابراهيم الشيخ علي
+الشهيد فوزان عمر خميس المصري
+الشهيد خليل أحمد خليل هنية
+الشهيد احمد فيصل عمرو المصري
+الشهيد محمد رزق سلمان ابو اغبيط
+الشهيد احمد فتحي حمدان بن حماد
+الشهيد أحمد رمزي اسعد الفراني
+الشهيد ضياء زياد عبد الكريم ابو ربيع
+الشهيد حسام محي الدين سيد عياد
+الشهيد كمال محمد أحمد ابو ركبه
+الشهيدة ملاك جابر عرفات عبد الدايم
+الشهيد وليد ابراهيم سلمان الوديدي
+الشهيد منير محمد رمضان الغليظ
+الشهيد نبيل عبد الرؤوف ابراهيم بهلول
+الشهيد عماد محمد أحمد حمادين
+الشهيد أحمد ممدوح سليم البوجي
+الشهيد محمد سعيد خميس ابو ربيع
+الشهيد محمود عدنان سعيد نصر
+الشهيد عرفات سعيد خميس ابو ربيع
+الشهيد بكري روبين نجيب معروف
+الشهيد ماهر فريد محمود ابو شوقه
+الشهيدة نهله حسن أحمد معروف
+الشهيد محمد عوني عبد البلتاجي
+الشهيد خالد يوسف ابراهيم عبدالله
+الشهيدة ولاء جمعه عبد الرحمن الافرنجي
+الشهيدة شذا محمد عصام حجازي
+الشهيد محمد عماد مصباح أبو شعبان
+الشهيد بهجت مفيد سلامه ابو عابده
+الشهيد أحمد سعيد عبد العزيز سلام
+الشهيد أحمد جمعه محمد المنيراوي
+الشهيد خليل ابراهيم محمد الشافعي
+الشهيد محمد نعيم عبد الحميد صلاح
+الشهيد يوسف خالد مسلم ابو خاطر
+الشهيد صائب رزق منصور النباهين
+الشهيدة ياسمين جمال أحمد العواودة
+الشهيد أحمد محمد نمر المقادمه
+الشهيد محمد عبد الرؤوف مسلم ابو خاطر
+الشهيدة هالة نعيم دمياطي حبيب
+الشهيد محمد مروان إبراهيم نصر
+الشهيد وسيم سليمان حسن ابومعمر
+الشهيد عمر جهاد محمد حمدونه
+الشهيدة سالي محمد فوزي الفحام
+الشهيد كايد عطا ابراهيم ابومعمر
+الطفل الشهيد محمد يوسف محمد زملط
+الطفل الشهيد هاني أحمد بسام حجازي
+الطفل الشهيد حسام إياد حسن أبوسعدة
+الطفل الشهيد محمد أحمد بسام حجازي
+الشهيد فادي ايهاب محمد رمضان حسونة
+الشهيد محمد اياد الدلعه
+الشهيد أيمن نهاد عبد الرحمن الجدي
+الشهيد فيصل عبدالله محمد ابو القمصان
+الشهيد احمد خالد محمود عمارنه
+الطفل الشهيد ريان حسام بني عودة
+الطفلة الشهيدة جنى سميح عثمان الارناؤط
+الطفلة الشهيدة سارة سميح عثمان الارناؤط
+الطفلة الشهيدة سجى سميح عثمان الارناؤط
+الطفلة الشهيدة ضحى سميح عثمان الارناؤط
+الشهيدة اسماء محمد عبد اللطيف ابو كلوب
+الشهيد سميح عثمان أحمد الارناؤط
+الشهيد فالح رجب محمود ورش اغا
+الشهيد محمود محمد محمد ابو صقر
+الشهيد رشيد مصطفى رشيد حمدونه
+الشهيدة نهايه ماهر أحمد ابو القرايا
+الشهيدة هديل ماهر أحمد ابو القرايا
+الشهيد ماهر أحمد عبد الحميد ابو القرايا
+الشهيد حسين محمد حسين الفار
+الشهيد اسامه سامي أحمد الزعانين
+الشهيد ابراهيم محمد ابراهيم بعلوشة
+الشهيد بندر محمد حسين البحري
+الشهيد محمد محمد فوزي الفحام
+الطفل الشهيد ياسين اسعد يوسف الغندور
+الطفلة الشهيدة ندى اسعد يوسف الغندور
+الشهيدة غالية اسعد يوسف الغندور
+الشهيد أحمد عبد المجيد محمد ابو ندى
+الشهيدة اسماء اسحاق خالد صيام
+الشهيد أحمد محمد ابراهيم هنا
+الشهيد نجيب ناجي ابراهيم سكر
+الشهيد معين مسعود ابراهيم شملخ
+الشهيد محمد أحمد عبد الجليل القصاص
+الشهيد طارق رفيق خضر الدحدوح
+الشهيد محمد جميل حسن الوحيدي
+الشهيد حمزه عيسى حسني صيام
+الشهيد محمد أيمن كمال ابو بليمي
+الشهيد بلال اسعد دياب الفيومي
+الشهيدة سندس عيسى حسني صيام
+الشهيد مهند كامل عيسى طوطح
+الشهيد تامر محمود فوزي ابو عقلين
+الشهيدة ميار سامي رمضان سليم
+الطفل الشهيد مصطفى زكريا صبحي ريان
+الطفل الشهيد محمد نجيب ناجي سكر
+الطفل الشهيد احمد محمد أحمد الهسي
+الطفلة الشهيدة هدى اياد راغب الهسي
+الطفل الشهيد براء محمد خالد ابو حسان
+الشهيد قصي امين ابراهيم عكاشه
+الشهيد محمود محمد اعمر
+الشهيد جمعة محمود جمعة سالم
+الشهيد عمران رياض حسن حارون
+الطفل الشهيد مهيمن ايمن الاخرس
+الشهيدة براءة خالد حسين ابو علي
+الشهيد فتحي سعيد عودة عبيد
+الشهيدة خولة علي عبد الله عبده
+الشهيد كامل محمود عرفه ابو سيف
+الشهيد باسل خميس محمد العبسي
+الشهيد نضال جبر عبد المجيد مسعود
+الشهيد علي محمد يعقوب ابو مطر
+الشهيد محمد خالد محمد كيلاني
+الشهيد مصطفى فايز صالح حسان
+الشهيد احمد محمد محمود الشعراوي
+الطفل الشهيد محمد محمود عبد الكريم ابو عودة
+الشهيد اسماعيل محمد عبد الهادي ابو جاسر
+الشهيد محمد صبري اسماعيل ابو عرار
+الشهيد نضال سليمان محمد درويش
+الشهيد شادي نزهات أحمد السيد
+الشهيد محمود سعد الدين محمد حبيب
+الشهيد سيد حسين سيد ابو درويش
+الشهيد هيثم سالم أحمد سعد
+الشهيد حماد جبر حماد حبيب
+الشهيد عدنان جبر حماد حبيب
+الشهيد محمود محمد كامل رشيد
+الشهيد مهنا كمال رمضان المصري
+الشهيد حسن عبد الرحيم حسن ابو كريم
+الشهيد محمد حسين السيد ابو درويش
+الشهيد سليم اسماعيل خضر العلمي
+الشهيد عبدالله عطيه محمد ابو عابد
+الشهيد محمد خليل محمود الأدهم
+الشهيد أحمد ابراهيم توفيق عباس
+الشهيد يحيى ابراهيم توفيق عباس
+الشهيد سلمان أحمد سلمان ابو غرابه
+الشهيد زياد جميل عبد الرحمن جودة
+الشهيد نصر الله ماهر سالم المصالحه
+الطفل الشهيد صهيب طلال نافذ الجندي
+الطفل الشهيد أسعد باسل سليمان فرج الله
+الشهيد وائل سليم أحمد المبحوح
+الشهيدة صابرين فايق شحادة شملخ
+الشهيد مصلح سليم سعيد الطرابين
+الشهيد عماد عرفات سعيد شبير
+الشهيد عبد الرازق عوض سالم حمدونه
+الشهيد اكرم علي ابراهيم فرج الله
+الشهيد قاسم عبدالله محمد قاسم
+الشهيد أحمد جهاد عبد الحميد ابو حسنه
+الشهيد محمد ماهر محمود عيسى
+الشهيدة نعيمه محمد سالم ضهير
+الشهيد حامد محمد علي سعد
+الشهيد ناصر محمد حسين الطبراني
+الشهيدة مروه عبد الله حسن الطبراني
+الشهيد محمد فؤاد سعيد ابو عسكر
+الشهيد سائد حسين علي قنديل
+الشهيد مطيع عبد القادر صالح نصر
+الشهيد ثروت محمد أحمد البيك
+الشهيد حازم عبد الكريم عبد الرحمن ابو عرقوب
+الشهيد ادهم جواد مرزوق البايض
+الشهيد محمد حرب محمد ابو سنيمه
+الشهيد محمد كمال محمد الحاج
+الشهيدة فاتن رباح اسماعيل ابو عرقوب
+الشهيد حاتم عبد الكريم سلامه اكي
+الشهيد محمد محمود عليان الواديه
+الشهيد سالم حرب سالم اسليم
+الشهيد محمد جميل سلمان البسوس
+الشهيد محمود حلمي محمد المدهون
+الشهيد باسل محمد عرفات ابراهيم زينو
+الشهيد أحمد سليمان حماد ضهير
+الشهيد بسام محمد سالم أبو عبيد أبو سمره
+الشهيد أحمد محمد زكريا جبر ابو الليل
+الشهيد هيثم حماده محمد الشاعر
+الشهيدة فداء ابراهيم محمد أبو عبيد أبو سمره
+الشهيد كرم ناصر ادريس شتات
+الشهيد الطاهر عبد الرحمن ابراهيم مطر
+الشهيد زايد محمود زايد عبد العال
+الشهيد محمود جميل سلمان البسوس
+الشهيد خالد ربيع عبد اللطيف عبد الجواد
+الشهيد عزالدين نعمان كامل منصور
+الشهيدة سعيد صلاح سعيد ابو عون
+الشهيد هيثم محمد مصطفى البنا
+الشهيد بكر خميس ديب المغربي
+الشهيد هيثم أحمد نايف ابو سته
+الشهيد عبد العزيز بكر كامل ماضي
+الشهيد عبد الرحمن سعدي ابراهيم البطران
+الشهيد ادهم منير رسمي الرفاتي
+الشهيد مصباح كريم مصباح حبيب
+الشهيد محمد سعدي ابراهيم البطران
+الشهيد حسام زكي أحمد صالح
+الشهيد صلاح الدين ماجد عودة ابو زكار
+الشهيد أحمد ماجد طالب مشرف
+الشهيد جهاد خالد محمد شويدح
+الشهيد علي حسن مصطفى ماضي
+الشهيد أشرف ايهاب جمال ابو حرب
+الشهيد كريم محمد عبد النبي شيخ العيد
+الشهيد بشار أحمد نايف ابو سته
+الشهيد جواد ادهم جواد البايض
+الطفل الشهيد يزن وسام حسني شاهين
+الطفل الشهيد عنان سعيد عنان أبو وردة
+الطفل الشهيد مصطفى وليد منصور نايفه
+الطفل الشهيد اسامة سعيد عنان أبو وردة
+الطفل الشهيد مهند محمد محمود الاشقر
+الطفل الشهيد أحمد زايد محمود عبد العال
+الطفل الشهيد فارس بسام محمد أبو عبيد أبو سمره
+الطفل الشهيد نشوان بسام محمد أبو عبيد أبو سمره
+الطفلة الشهيدة ليان سعيد عنان أبو وردة
+الطفل الشهيد نعمان بسام محمد أبو عبيد أبو سمره
+الطفل الشهيد جود أحمد سليمان ضهير
+الطفل الشهيد علاء حاتم عبد الحفيظ اسماعيل
+الطفلة الشهيدة ليلاس أحمد سليمان ضهير
+الطفلة الشهيدة كراز زايد محمود عبد العال
+الطفلة الشهيدة ألاء بكر خميس المغربي
+الشهيد يوسف محمد جمعه ابوسالم
+الشهيد خالد أحمد يونس صبيح
+الطفل الشهيد محمد امجد عبد الرحمن مطر
+الطفلة الشهيدة غدير امجد عبد الرحمن مطر
+الطفلة الشهيدة غزل امجد عبد الرحمن مطر
+الشهيدة عبير محمد اسماعيل مطر
+الشهيد عبد الرحمن ابراهيم أحمد مطر
+الشهيدة أميرة جمال أحمد العقيلي
+الشهيد عبد العزيز حسين مطر شوحه
+الشهيد محمد أحمد موسى الهسي
+الشهيد محمد منذر زكريا الفصيح
+الشهيد ابراهيم ياسر محمد موسى
+الشهيد امجد زهير محمود عكاشه
+الشهيد ابراهيم سعيد طه العايدي
+الشهيد كمال كامل محمد الهسي
+الشهيد محمد جمال خليل ابو الكاس
+الشهيد علاء رياض خضر ارحيم
+الشهيد صهيب ماهر عبد الرحمن تمراز
+الشهيدة روان ابو بكر محمد خلة
+الشهيد قصي ابو بكر محمد خلة
+الشهيد مصعب عبد المجيد أحمد ابو شعر
+الطفل الشهيد يوسف ابو بكر محمد خلة
+الطفل الشهيد أحمد وليد رشاد رصرص
+الطفلة الشهيدة رغد اشرف يوسف خلة
+الطفلة الشهيدة آمنه اشرف عبدالله المفتي
+الطفلة الشهيدة أروى اشرف يو
